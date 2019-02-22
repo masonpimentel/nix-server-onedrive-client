@@ -1,0 +1,28 @@
+{
+    "url_root": "https://graph.microsoft.com/v1.0",
+    "paths": {
+        "upload": [
+            ""
+        ],
+        "download": [
+
+        ]
+    },
+    "auth": {
+        "client_id": "fill this in",
+        "refresh_body": ""
+    },
+    "verbosity": {
+        "verbose": true,
+        "debug": true
+    },
+    "drive_id": "",
+    "dir_id": "",
+    "limits": {
+        "@note": "in bytes",
+        "@partition_note": "60 * 1024 * 1024 = 60MB = 62914560",
+        "upload_partition_limit": 62914560,
+        "@max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
+        "backup_max_size": 5368709120
+    }
+}

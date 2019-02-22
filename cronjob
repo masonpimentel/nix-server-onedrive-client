@@ -1,0 +1,19 @@
+#!/bin/bash
+
+epoch=$(date +%s)
+tdate=$(date "+%F-%T")
+ftdate=${tdate//":"/"-"}
+
+filename="backup_"$epoch"_"$ftdate".tar.gz"
+path="repo-onedrive-backup/"
+
+echo "Creating" $filename "..."
+
+cd /home/snxfz-app/
+tar -zcf $path$filename private_repos/
+
+cd $path
+python3 upload.py $filename
+
+echo "Cleaning up..."
+rm $filename
