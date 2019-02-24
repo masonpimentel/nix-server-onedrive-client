@@ -1,28 +1,34 @@
 {
-    "url_root": "https://graph.microsoft.com/v1.0",
-    "paths": {
-        "upload": [
-            ""
-        ],
-        "download": [
-
-        ]
-    },
     "auth": {
-        "client_id": "fill this in",
+        "auth_code": "fill_me_in",
+        "client_id": "fill_me_in",
+        "client_secret": "fill_me_in",
         "refresh_body": ""
     },
-    "verbosity": {
-        "verbose": true,
-        "debug": true
-    },
-    "drive_id": "",
     "dir_id": "",
+    "drive_id": "",
     "limits": {
-        "@note": "in bytes",
-        "@partition_note": "60 * 1024 * 1024 = 60MB = 62914560",
-        "upload_partition_limit": 62914560,
-        "@max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
-        "backup_max_size": 5368709120
+        "@backup_max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
+        "@upload_partition_limit_note": "60 * 1024 * 1024 = 60MB = 62914560",
+        "backup_max_size": 5368709120,
+        "upload_partition_limit": 62914560
+    },
+    "paths": {
+        "download": [],
+        "upload": [
+            ""
+        ]
+    },
+    "req_bodies": {
+        "api_get_refresh_token": "client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={auth_code}&grant_type=authorization_code"
+    },
+    "urls": {
+        "api_get_refresh_token": "https://login.live.com/oauth20_token.srf",
+        "redirect_uri": "http://localhost:8000/unix-server-onedrive-client/callback",
+        "url_root": "https://graph.microsoft.com/v1.0"
+    },
+    "verbosity": {
+        "debug": true,
+        "verbose": true
     }
 }
