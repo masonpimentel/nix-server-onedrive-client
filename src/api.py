@@ -1,13 +1,14 @@
 import requests
 import json
 from fs import *
+from debugging import *
 
 with open("../config.json") as config_file:
     json_config = json.load(config_file)
     urls = json_config["urls"]
     req_bodies = json_config["req_bodies"]
     auth = json_config["auth"]
-    URL_ROOT = json_config["url_root"]
+    URL_ROOT = urls["url_root"]
     REFRESH_BODY = json_config["auth"]["refresh_body"]
 
 
@@ -29,7 +30,14 @@ def api_get_refresh_token():
     b = req_bodies["api_get_refresh_token"]
     b = b.format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], auth_code=auth["auth_code"])
     r = requests.post(urls["api_get_refresh_token"], data=b, headers=h)
-    return r.json()["refresh_token"]
+    r_parsed = r.json()
+    if "error" in r_parsed.keys():
+        if r_parsed["error"] == "invalid_grant":
+            # TODO add section
+            print_message("Your auth code has expired. Please refer to TODO to get a new one.", "CONFIG", "error")
+        return None
+    else:
+        return r.json()["refresh_token"]
 
 
 def api_get_file_id(token, filename):
