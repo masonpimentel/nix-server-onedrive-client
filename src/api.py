@@ -4,8 +4,17 @@ from fs import *
 
 with open("../config.json") as config_file:
     json_config = json.load(config_file)
+    urls = json_config["urls"]
+    req_bodies = json_config["req_bodies"]
+    auth = json_config["auth"]
     URL_ROOT = json_config["url_root"]
     REFRESH_BODY = json_config["auth"]["refresh_body"]
+
+
+def api_create_urlencoded_header():
+    return {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
 
 
 def api_create_get_header(token):
@@ -13,6 +22,14 @@ def api_create_get_header(token):
         'Authorization': token,
         'Content-Type': 'application/json'
     }
+
+
+def api_get_refresh_token():
+    h = api_create_urlencoded_header()
+    b = req_bodies["api_get_refresh_token"]
+    b = b.format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], auth_code=auth["auth_code"])
+    r = requests.post(urls["api_get_refresh_token"], data=b, headers=h)
+    return r.json()["refresh_token"]
 
 
 def api_get_file_id(token, filename):
@@ -25,7 +42,7 @@ def api_get_file_id(token, filename):
 
 
 def api_get_token():
-    h = {'Content-Type': 'application/x-www-form-urlencoded'}
+    h = api_create_urlencoded_header()
     r = requests.post("https://login.live.com/oauth20_token.srf", data=REFRESH_BODY, headers=h)
     return r.json()["access_token"]
 
