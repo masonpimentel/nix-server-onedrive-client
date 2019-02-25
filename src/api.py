@@ -3,8 +3,8 @@ import json
 from fs import *
 from debugging import *
 
-with open("../config.json") as config_file:
-    json_config = json.load(config_file)
+with open("../config.json") as e_config_file:
+    json_config = json.load(e_config_file)
     urls = json_config["urls"]
     req_bodies = json_config["req_bodies"]
     auth = json_config["auth"]
@@ -35,6 +35,8 @@ def api_get_refresh_token():
         if r_parsed["error"] == "invalid_grant":
             # TODO add section
             print_message("Your auth code has expired. Please refer to TODO to get a new one.", "CONFIG", "error")
+        elif r_parsed["error"] == "invalid_client":
+            print_message("Something went wrong with the client auth info you entered - either the client ID or client secret is incorrect. Please refer to the steps in TODO.", "CONFIG", "error")
         return None
     else:
         return r.json()["refresh_token"]

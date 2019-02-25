@@ -2,8 +2,8 @@ import json
 import time
 
 
-with open("../config.json") as config_file:
-    json_config = json.load(config_file)
+with open("../config.json") as e_config_file:
+    json_config = json.load(e_config_file)
     DEBUG = json_config["verbosity"]["debug"]
     VERBOSE = json_config["verbosity"]["verbose"]
 
