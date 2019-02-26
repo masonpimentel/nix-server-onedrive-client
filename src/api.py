@@ -2,14 +2,7 @@ import requests
 import json
 from fs import *
 from debugging import *
-
-with open("../config.json") as e_config_file:
-    json_config = json.load(e_config_file)
-    urls = json_config["urls"]
-    req_bodies = json_config["req_bodies"]
-    auth = json_config["auth"]
-    URL_ROOT = urls["url_root"]
-    REFRESH_BODY = json_config["auth"]["refresh_body"]
+from utils import *
 
 
 def api_create_urlencoded_header():
@@ -26,6 +19,10 @@ def api_create_get_header(token):
 
 
 def api_get_refresh_token():
+    urls = config_get_urls()
+    auth = config_get_auth()
+    req_bodies = config_get_req_bodies()
+
     h = api_create_urlencoded_header()
     b = req_bodies["api_get_refresh_token"]
     b = b.format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], auth_code=auth["auth_code"])

@@ -3,9 +3,9 @@ import time
 
 
 with open("../config.json") as e_config_file:
-    json_config = json.load(e_config_file)
-    DEBUG = json_config["verbosity"]["debug"]
-    VERBOSE = json_config["verbosity"]["verbose"]
+    e_json_config = json.load(e_config_file)
+    DEBUG = e_json_config["verbosity"]["debug"]
+    VERBOSE = e_json_config["verbosity"]["verbose"]
 
 
 def format_type(padding, body):
