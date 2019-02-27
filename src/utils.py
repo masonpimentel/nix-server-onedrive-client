@@ -16,3 +16,7 @@ def config_get_auth():
 
 def config_get_req_bodies():
     return config_get_root()["req_bodies"]
+
+
+def config_get_paths():
+    return config_get_root()["paths"]

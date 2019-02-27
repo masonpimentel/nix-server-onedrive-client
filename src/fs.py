@@ -1,9 +1,14 @@
 import os
 import json
 
-with open("../config.json") as e_config_file:
-    e_json_config = json.load(e_config_file)
-    UPLOAD_PATHS = e_json_config["paths"]["upload"]
+from utils import *
+
+# with open("../config.json") as e_config_file:
+#     e_json_config = json.load(e_config_file)
+#     UPLOAD_PATHS = e_json_config["paths"]["upload"]
+
+# TODO FIX
+UPLOAD_PATHS = ["0"]
 
 def fs_get_filename():
     return os.path.basename(UPLOAD_PATHS[0])

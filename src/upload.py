@@ -5,11 +5,11 @@ from api import *
 
 from fsplit.filesplit import FileSplit
 
-with open("../config.json") as e_config_file:
-    e_json_config = json.load(e_config_file)
-    BACKUP_MAX_SIZE = e_json_config["limits"]["backup_max_size"]
-    UPLOAD_PARTITION_LIMIT = e_json_config["limits"]["upload_partition_limit"]
-    UPLOAD_PATHS = e_json_config["paths"]["upload"]
+# with open("../config.json") as e_config_file:
+#     e_json_config = json.load(e_config_file)
+#     BACKUP_MAX_SIZE = e_json_config["limits"]["backup_max_size"]
+#     UPLOAD_PARTITION_LIMIT = e_json_config["limits"]["upload_partition_limit"]
+#     UPLOAD_PATHS = e_json_config["paths"]["upload"]
 
 
 def delete_oldest(token, file_id):
@@ -44,11 +44,13 @@ def get_chunks():
 def main():
     token = api_get_token()
     if not token:
-        print_message("There was a problem with your refresh token. Exiting.", "UPLOAD", "error")
         return
-    return
+    print("got token")
 
     file_id = api_get_file_id(token, None)
+    if not file_id:
+        return
+
     api_get_all_backups(token, file_id)
     upload_url = api_create_upload_session(token)
     total_size = fs_get_upload_size()

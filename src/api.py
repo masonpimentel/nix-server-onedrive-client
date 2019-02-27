@@ -44,22 +44,37 @@ def api_get_refresh_token():
         return r.json()["refresh_token"]
 
 
-def api_get_file_id(token, filename):
-    if filename is None:
-        url = URL_ROOT + "/me/drive/root:/ServerBackup"
-    else:
-        url = URL_ROOT + "/me/drive/root:/ServerBackup/" + filename
-    r = requests.get(url, headers=api_create_get_header(token))
-    return r.json()["id"]
-
-
 def api_get_token():
+    urls = config_get_urls()
+
     h = api_create_urlencoded_header()
-    r = requests.post("https://login.live.com/oauth20_token.srf", data=config_get_req_bodies()["refresh_body"], headers=h)
+    r = requests.post(urls["api_get_refresh_token"], data=config_get_req_bodies()["refresh_body"], headers=h)
     r_parsed = r.json()
     if "access_token" not in r_parsed.keys():
+        print_message("Unexpected error getting token", "UPLOAD", "error")
         return None
-    return r.json()["access_token"]
+    else:
+        return r.json()["access_token"]
+
+
+def api_get_file_id(token, filename):
+    urls = config_get_urls()
+    upload_paths = config_get_paths()["upload_cloud"]
+
+    if filename is None:
+        #TODO make this work with multiple paths
+        url = urls["url_root"] + urls["api_get_file_id_sub"].format(directory=upload_paths[0])
+    else:
+        url = urls["url_root"] + urls["api_get_file_id_sub"].format(directory=upload_paths[0], filename=filename)
+    r = requests.get(url, headers=api_create_get_header(token))
+    r_parsed = r.json()
+    if "id" not in r_parsed.keys():
+        print_message("Unexpected error getting file ID", "UPLOAD", "error")
+        return None
+    else:
+        return r.json()["id"]
+
+
 
 
 def api_delete_file(token, file_id):
