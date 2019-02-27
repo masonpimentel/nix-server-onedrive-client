@@ -33,7 +33,6 @@ def main():
         if refresh_token is not None:
             json_config["auth"]["refresh_body"] = refresh_token
             write_to_config(json_config, "Successfully set up refresh token!")
-
     else:
         print_message("Your refresh token has already been configured!", "CONFIG", "info")
 

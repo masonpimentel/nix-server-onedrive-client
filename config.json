@@ -1,12 +1,10 @@
 {
     "auth": {
-        "auth_code": "fill_me_in",
+        "auth_code": "",
         "client_id": "fill_me_in",
         "client_secret": "fill_me_in",
         "refresh_body": ""
     },
-    "dir_id": "",
-    "drive_id": "",
     "limits": {
         "@backup_max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
         "@upload_partition_limit_note": "60 * 1024 * 1024 = 60MB = 62914560",
@@ -24,6 +22,7 @@
     },
     "urls": {
         "api_get_refresh_token": "https://login.live.com/oauth20_token.srf",
+        "get_auth_code_sub": "https://login.live.com/oauth20_authorize.srf?client_id={client_id}&scope=files.readwrite+offline_access&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Funix-server-onedrive-client%2Fcallback",
         "redirect_uri": "http://localhost:8000/unix-server-onedrive-client/callback",
         "url_root": "https://graph.microsoft.com/v1.0"
     },
