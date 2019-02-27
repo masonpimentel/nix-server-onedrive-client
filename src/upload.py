@@ -43,6 +43,11 @@ def get_chunks():
 
 def main():
     token = api_get_token()
+    if not token:
+        print_message("There was a problem with your refresh token. Exiting.", "UPLOAD", "error")
+        return
+    return
+
     file_id = api_get_file_id(token, None)
     api_get_all_backups(token, file_id)
     upload_url = api_create_upload_session(token)

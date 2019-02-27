@@ -4,6 +4,7 @@ from fs import *
 from debugging import *
 from utils import *
 
+#TODO need to handle incorrect refresh token
 
 def api_create_urlencoded_header():
     return {
@@ -24,7 +25,7 @@ def api_get_refresh_token():
     req_bodies = config_get_req_bodies()
 
     h = api_create_urlencoded_header()
-    b = req_bodies["api_get_refresh_token"]
+    b = req_bodies["api_get_refresh_token_sub"]
     b = b.format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], auth_code=auth["auth_code"])
     r = requests.post(urls["api_get_refresh_token"], data=b, headers=h)
     r_parsed = r.json()
@@ -54,7 +55,10 @@ def api_get_file_id(token, filename):
 
 def api_get_token():
     h = api_create_urlencoded_header()
-    r = requests.post("https://login.live.com/oauth20_token.srf", data=REFRESH_BODY, headers=h)
+    r = requests.post("https://login.live.com/oauth20_token.srf", data=config_get_req_bodies()["refresh_body"], headers=h)
+    r_parsed = r.json()
+    if "access_token" not in r_parsed.keys():
+        return None
     return r.json()["access_token"]
 
 

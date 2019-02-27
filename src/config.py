@@ -12,8 +12,9 @@ def main():
     json_config = config_get_root()
     auth = config_get_auth()
     urls = config_get_urls()
+    req_bodies = config_get_req_bodies()
 
-    if not auth["refresh_body"]:
+    if not req_bodies["refresh_body"]:
         if auth["client_id"] == "fill_me_in" or auth["client_secret"] == "fill_me_in":
             # TODO add section
             print_message("Client auth info not added to config. Please refer to TODO", "CONFIG", "error")
@@ -31,8 +32,9 @@ def main():
 
         refresh_token = api_get_refresh_token()
         if refresh_token is not None:
-            json_config["auth"]["refresh_body"] = refresh_token
-            write_to_config(json_config, "Successfully set up refresh token!")
+            json_config["auth"]["refresh_token"] = refresh_token
+            json_config["req_bodies"]["refresh_body"] = req_bodies["refresh_body_sub"].format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], refresh_token=refresh_token)
+            write_to_config(json_config, "Successfully configured!")
     else:
         print_message("Your refresh token has already been configured!", "CONFIG", "info")
 

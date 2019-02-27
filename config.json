@@ -3,7 +3,7 @@
         "auth_code": "",
         "client_id": "fill_me_in",
         "client_secret": "fill_me_in",
-        "refresh_body": ""
+        "refresh_token": ""
     },
     "limits": {
         "@backup_max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
@@ -18,7 +18,8 @@
         ]
     },
     "req_bodies": {
-        "api_get_refresh_token": "client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={auth_code}&grant_type=authorization_code"
+        "api_get_refresh_token_sub": "client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={auth_code}&grant_type=authorization_code",
+        "refresh_body": ""
     },
     "urls": {
         "api_get_refresh_token": "https://login.live.com/oauth20_token.srf",
