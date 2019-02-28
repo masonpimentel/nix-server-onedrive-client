@@ -10,8 +10,13 @@ from utils import *
 # TODO FIX
 UPLOAD_PATHS = ["0"]
 
-def fs_get_filename():
-    return os.path.basename(UPLOAD_PATHS[0])
+def fs_get_local_filename():
+    paths = config_get_paths()
+    return os.path.basename(paths["upload_pairs"][0]["local_dir"])
+
+
+def fs_get_filename(filename):
+    return os.path.basename(filename)
 
 
 def fs_get_upload_size():

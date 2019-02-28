@@ -59,13 +59,13 @@ def api_get_token():
 
 def api_get_file_id(token, filename):
     urls = config_get_urls()
-    upload_paths = config_get_paths()["upload_cloud"]
+    upload_pairs = config_get_paths()["upload_pairs"]
 
     if filename is None:
         #TODO make this work with multiple paths
-        url = urls["url_root"] + urls["api_get_file_id_sub"].format(directory=upload_paths[0])
+        url = urls["url_root"] + urls["directory_sub"].format(directory=upload_pairs[0]["server_dir"])
     else:
-        url = urls["url_root"] + urls["api_get_file_id_sub"].format(directory=upload_paths[0], filename=filename)
+        url = urls["url_root"] + urls["directory_filename_sub"].format(directory=upload_pairs[0]["server_dir"], filename=filename)
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
@@ -75,6 +75,18 @@ def api_get_file_id(token, filename):
         return r.json()["id"]
 
 
+def api_create_upload_session(token):
+    urls = config_get_urls()
+
+    server_filename = fs_get_filename(config_get_paths()["upload_pairs"][0]["server_dir"])
+    url = urls["url_root"] + urls["directory_sub"].format(directory=server_filename) + "/" + fs_get_local_filename() + ":/createUploadSession"
+    r = requests.post(url, headers=api_create_get_header(token))
+    r_parsed = r.json()
+    if "uploadUrl" not in r_parsed.keys():
+        print_message("Unexpected error creating upload session", "UPLOAD", "error")
+        return None
+    else:
+        return r.json()["uploadUrl"]
 
 
 def api_delete_file(token, file_id):
@@ -84,10 +96,7 @@ def api_delete_file(token, file_id):
     return
 
 
-def api_create_upload_session(token):
-    url = URL_ROOT + "/drive/root:/ServerBackup/" + fs_get_filename() + ":/createUploadSession"
-    r = requests.post(url, headers=api_create_get_header(token))
-    return r.json()["uploadUrl"]
+
 
 
 def api_upload_chunk(url, bottom, top, total, payload):

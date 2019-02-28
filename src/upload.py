@@ -34,25 +34,33 @@ def maintain_size(token, file_id):
 def get_chunks():
     files = os.listdir(".")
     chunks = []
-    filename = fs_get_filename().split(".")[0]
+    filename = fs_get_local_filename().split(".")[0]
     for file in files:
         if file.startswith(filename):
             chunks.append(file)
     return chunks
 
 
-def main():
+def create_upload_dict():
     token = api_get_token()
-    if not token:
-        return
-    print("got token")
 
-    file_id = api_get_file_id(token, None)
-    if not file_id:
+    upload_dict = {
+        "token": token,
+        "file_id": api_get_file_id(token, None),
+        "upload_url": api_create_upload_session(token)
+    }
+
+    for key in upload_dict.keys():
+        if not upload_dict[key]:
+            return None
+
+    return upload_dict
+
+def main():
+    upload_dict = create_upload_dict()
+    if not upload_dict:
         return
 
-    api_get_all_backups(token, file_id)
-    upload_url = api_create_upload_session(token)
     total_size = fs_get_upload_size()
     if total_size > UPLOAD_PARTITION_LIMIT:
         print("Greater than 60 MB - need to split into chunk_name")
