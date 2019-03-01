@@ -1,11 +1,7 @@
 import json
 import time
 
-
-with open("../config.json") as e_config_file:
-    e_json_config = json.load(e_config_file)
-    DEBUG = e_json_config["verbosity"]["debug"]
-    VERBOSE = e_json_config["verbosity"]["verbose"]
+from utils import *
 
 
 def format_type(padding, body):
@@ -19,13 +15,15 @@ def format_prefix(padding, body):
 
 
 def print_message(message, type_prefix, message_type):
+    verbosity = config_get_verbosity()
+
     if message_type == "info":
         print(str(time.strftime("%c")) + format_type(12, "INFO") + format_prefix(12, type_prefix) + message)
     elif message_type == "error":
         print(str(time.strftime("%c")) + format_type(12, "ERROR") + format_prefix(12, type_prefix) + message)
-    elif message_type == "debug" and DEBUG:
+    elif message_type == "debug" and verbosity["debug"]:
         print(str(time.strftime("%c")) + format_type(12, "DEBUG") + format_prefix(12, type_prefix) + message)
-    elif message_type == "verbose" and VERBOSE:
+    elif message_type == "verbose" and verbosity["verbose"]:
         print(str(time.strftime("%c")) + format_type(12, "VERBOSE") + format_prefix(12, type_prefix) + message)
     else:
         print(str(time.strftime("%c")) + format_type(12, "ERROR") + format_prefix(12, type_prefix) + "Unknown type argument supplied to print_message")
