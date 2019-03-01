@@ -57,13 +57,16 @@ def create_upload_dict():
     return upload_dict
 
 def main():
+    limits = config_get_limits()
+    paths = config_get_paths()
+
     upload_dict = create_upload_dict()
     if not upload_dict:
         return
 
     total_size = fs_get_upload_size()
-    if total_size > UPLOAD_PARTITION_LIMIT:
-        print("Greater than 60 MB - need to split into chunk_name")
+    if total_size > limits["upload_partition_limit"]:
+        print_message("Greater than 60 MB - need to split into chunk_name", "UPLOAD", "verbose")
         # TODO: make this iterate through all the paths
         fs = FileSplit(file=UPLOAD_PATHS[0], splitsize=UPLOAD_PARTITION_LIMIT)
         fs.split()
@@ -79,10 +82,10 @@ def main():
             api_upload_chunk(upload_url, start_byte, start_byte + chunk_size - 1, total_size, payload)
             start_byte += chunk_size
     else:
-        print("Uploading entire file in one chunk")
-        with open(UPLOAD_PATHS[0], 'rb') as file:
+        print_message("Uploading entire file in one chunk", "UPLOAD", "verbose")
+        with open(paths["upload_pairs"][0]["local_dir"], 'rb') as file:
             payload = file.read()
-        api_upload_chunk(upload_url, 0, total_size-1, total_size, payload)
+        api_upload_chunk(upload_dict["upload_url"], 0, total_size-1, total_size, payload)
 
     # need to keep within 50 GB
     maintain_size(token, file_id)

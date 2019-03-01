@@ -20,7 +20,8 @@ def fs_get_filename(filename):
 
 
 def fs_get_upload_size():
-    return os.stat(UPLOAD_PATHS[0]).st_size
+    paths = config_get_paths()
+    return os.stat(paths["upload_pairs"][0]["local_dir"]).st_size
 
 
 def fs_get_chunk_size(filename):
