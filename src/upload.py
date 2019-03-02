@@ -1,15 +1,7 @@
-import os
-
 from fs import *
 from api import *
 
 from fsplit.filesplit import FileSplit
-
-# with open("../config.json") as e_config_file:
-#     e_json_config = json.load(e_config_file)
-#     BACKUP_MAX_SIZE = e_json_config["limits"]["backup_max_size"]
-#     UPLOAD_PARTITION_LIMIT = e_json_config["limits"]["upload_partition_limit"]
-#     UPLOAD_PATHS = e_json_config["paths"]["upload"]
 
 
 def delete_oldest(token, file_id):
@@ -47,7 +39,8 @@ def create_upload_dict():
     upload_dict = {
         "token": token,
         "file_id": api_get_file_id(token, None),
-        "upload_url": api_create_upload_session(token)
+        "upload_url": api_create_upload_session(token),
+        "total_size": fs_get_upload_size()
     }
 
     for key in upload_dict.keys():
@@ -64,7 +57,7 @@ def main():
     if not upload_dict:
         return
 
-    total_size = fs_get_upload_size()
+    total_size = upload_dict["total_size"]
     if total_size > limits["upload_partition_limit"]:
         print_message("Greater than 60 MB - need to split into chunk_name", "UPLOAD", "verbose")
         # TODO: make this iterate through all the paths
@@ -88,7 +81,7 @@ def main():
         api_upload_chunk(upload_dict["upload_url"], 0, total_size-1, total_size, payload)
 
     # need to keep within 50 GB
-    maintain_size(token, file_id)
+    #maintain_size(token, file_id)
 
 
 if __name__ == '__main__':

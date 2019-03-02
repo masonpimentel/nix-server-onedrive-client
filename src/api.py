@@ -19,6 +19,13 @@ def api_create_get_header(token):
     }
 
 
+def api_upload_error_parser(response, generic_msg):
+    print_message(generic_msg, "UPLOAD", "error")
+    # TODO error handle incorrectly configured local or server dir
+    if "error_description" in response.keys():
+        print_message("Error description: " + response["error_description"], "UPLOAD", "error")
+
+
 def api_get_refresh_token():
     urls = config_get_urls()
     auth = config_get_auth()
@@ -51,7 +58,7 @@ def api_get_token():
     r = requests.post(urls["api_get_refresh_token"], data=config_get_req_bodies()["refresh_body"], headers=h)
     r_parsed = r.json()
     if "access_token" not in r_parsed.keys():
-        print_message("Unexpected error getting token", "UPLOAD", "error")
+        api_upload_error_parser(r_parsed, "Unexpected error getting token")
         return None
     else:
         return r.json()["access_token"]
@@ -69,7 +76,7 @@ def api_get_file_id(token, filename):
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
-        print_message("Unexpected error getting file ID", "UPLOAD", "error")
+        api_upload_error_parser(r_parsed, "Unexpected error getting file ID")
         return None
     else:
         return r.json()["id"]
@@ -89,6 +96,18 @@ def api_create_upload_session(token):
         return r.json()["uploadUrl"]
 
 
+def api_upload_chunk(url, bottom, top, total, payload):
+    length = top - bottom + 1
+    c_range = "bytes " + str(bottom) + "-" + str(top) + "/" + str(total)
+    h = {
+        'Content-Length': str(length),
+        'Content-Range': c_range
+    }
+    print_message("Uploading " + str(h), "UPLOAD", "verbose")
+    r = requests.put(url, data=payload, headers=h)
+    print("Status: " + str(r.status_code))
+
+
 def api_delete_file(token, file_id):
     url = URL_ROOT + "/me/drive/items/" + file_id
     requests.delete(url, headers=api_create_get_header(token))
@@ -99,16 +118,6 @@ def api_delete_file(token, file_id):
 
 
 
-def api_upload_chunk(url, bottom, top, total, payload):
-    length = top - bottom + 1
-    c_range = "bytes " + str(bottom) + "-" + str(top) + "/" + str(total)
-    h = {
-        'Content-Length': str(length),
-        'Content-Range': c_range
-    }
-    print("Uploading " + str(h))
-    r = requests.put(url, data=payload, headers=h)
-    print("Status: " + str(r.status_code))
 
 
 def api_get_server_backup_size(token):
