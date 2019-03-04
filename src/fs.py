@@ -26,7 +26,7 @@ def fs_get_upload_size():
     try:
         size = os.stat(paths["upload_pairs"][0]["local_dir"]).st_size
     except FileNotFoundError:
-        print_message("File " + paths["upload_pairs"][0]["local_dir"] + " coult not found!", "UPLOAD", "error")
+        print_message("File '" + paths["upload_pairs"][0]["local_dir"] + "' could not be found!", "UPLOAD", "error")
         return None
     return os.stat(paths["upload_pairs"][0]["local_dir"]).st_size
 

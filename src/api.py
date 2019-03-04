@@ -19,6 +19,10 @@ def api_create_get_header(token):
     }
 
 
+def check_200_status(code):
+    return 200 <= code < 300
+
+
 def api_upload_error_parser(response, generic_msg):
     print_message(generic_msg, "UPLOAD", "error")
     # TODO error handle incorrectly configured local or server dir
@@ -105,7 +109,11 @@ def api_upload_chunk(url, bottom, top, total, payload):
     }
     print_message("Uploading " + str(h), "UPLOAD", "verbose")
     r = requests.put(url, data=payload, headers=h)
-    print("Status: " + str(r.status_code))
+    if not check_200_status(r.status_code):
+        print_message("Error uploading chunk, status: " + str(r.status_code), "UPLOAD", "error")
+        return False
+    else:
+        return True
 
 
 def api_delete_file(token, file_id):

@@ -78,7 +78,8 @@ def main():
         print_message("Uploading entire file in one chunk", "UPLOAD", "verbose")
         with open(paths["upload_pairs"][0]["local_dir"], 'rb') as file:
             payload = file.read()
-        api_upload_chunk(upload_dict["upload_url"], 0, total_size-1, total_size, payload)
+        if not api_upload_chunk(upload_dict["upload_url"], 0, total_size-1, total_size, payload):
+            return
 
     # need to keep within 50 GB
     #maintain_size(token, file_id)
