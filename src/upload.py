@@ -4,15 +4,6 @@ from api import *
 from fsplit.filesplit import FileSplit
 
 
-def delete_oldest(token, file_id):
-    files = api_get_all_backups(token, file_id)
-    files.sort()
-    oldest = files[0]
-    file_id = api_get_file_id(token, oldest)
-    print("Deleting " + file_id)
-    api_delete_file(token, file_id)
-
-
 def maintain_size(token, file_id):
     backup_size = api_get_server_backup_size(token)
     while backup_size > BACKUP_MAX_SIZE:
@@ -21,6 +12,15 @@ def maintain_size(token, file_id):
         backup_size = api_get_server_backup_size(token)
     else:
         return
+
+
+def delete_oldest(token, file_id):
+    files = api_get_all_backups(token, file_id)
+    files.sort()
+    oldest = files[0]
+    file_id = api_get_file_id(token, oldest)
+    print("Deleting " + file_id)
+    api_delete_file(token, file_id)
 
 
 def get_chunks():
@@ -59,17 +59,23 @@ def main():
 
     total_size = upload_dict["total_size"]
     if total_size > limits["upload_partition_limit"]:
-        print_message("Greater than 60 MB - need to split into chunk_name", "UPLOAD", "verbose")
+        limit = limits["upload_partition_limit"]
+        limit_mb = str(limit / 1024 / 1024)
+        upload_url = upload_dict["upload_url"]
+        local_dir = paths["upload_pairs"][0]["local_dir"]
+        print_message("Greater than " + limit_mb + "MB - need to split into chunks", "UPLOAD", "verbose")
+
         # TODO: make this iterate through all the paths
-        fs = FileSplit(file=UPLOAD_PATHS[0], splitsize=UPLOAD_PARTITION_LIMIT)
+        fs = FileSplit(file=local_dir, splitsize=limit)
+        # TODO this should be done in a tmp directory and garbage collected
         fs.split()
         chunks = get_chunks()
         start_byte = 0
         for chunk_name in chunks:
             chunk_size = fs_get_chunk_size(chunk_name)
-            if chunk_size > UPLOAD_PARTITION_LIMIT:
-                print("Chunk too big")
-                # TODO: throw error
+            if chunk_size > limit:
+                print_message("There was a problem partitioning the tar file", "UPLOAD", "error")
+                return
             with open(chunk_name, 'rb') as chunk:
                 payload = chunk.read()
             api_upload_chunk(upload_url, start_byte, start_byte + chunk_size - 1, total_size, payload)
