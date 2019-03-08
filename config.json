@@ -29,7 +29,9 @@
         "api_get_refresh_token": "https://login.live.com/oauth20_token.srf",
         "directory_filename_sub": "/me/drive/root:/{directory}/{filename}",
         "directory_sub": "/me/drive/root:/{directory}",
+        "directory_children_sub": "/me/drive/items/{file_id}/children",
         "get_auth_code_sub": "https://login.live.com/oauth20_authorize.srf?client_id={client_id}&scope=files.readwrite+offline_access&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Funix-server-onedrive-client%2Fcallback",
+        "file_id_sub": "/me/drive/items/{file_id}",
         "redirect_uri": "http://localhost:8000/unix-server-onedrive-client/callback",
         "url_root": "https://graph.microsoft.com/v1.0"
     },

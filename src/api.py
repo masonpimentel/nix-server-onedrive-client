@@ -80,8 +80,7 @@ def api_get_file_id(token, filename):
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
-        api_upload_error_parser(r_parsed, "Unexpected error getting file ID")
-        return None
+        raise RuntimeError("Unexpected error creating upload session")
     else:
         return r.json()["id"]
 
@@ -94,8 +93,7 @@ def api_create_upload_session(token):
     r = requests.post(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "uploadUrl" not in r_parsed.keys():
-        print_message("Unexpected error creating upload session", "UPLOAD", "error")
-        return None
+        raise RuntimeError("Unexpected error creating upload session")
     else:
         return r.json()["uploadUrl"]
 
@@ -110,35 +108,44 @@ def api_upload_chunk(url, bottom, top, total, payload):
     print_message("Uploading " + str(h), "UPLOAD", "verbose")
     r = requests.put(url, data=payload, headers=h)
     if not check_200_status(r.status_code):
-        print_message("Error uploading chunk, status: " + str(r.status_code), "UPLOAD", "error")
-        return False
-    else:
-        return True
-
-
-def api_delete_file(token, file_id):
-    url = URL_ROOT + "/me/drive/items/" + file_id
-    requests.delete(url, headers=api_create_get_header(token))
-    # TODO check for 204 - and make some kind of max attempts check
-    return
-
-
-
-
-
+        raise RuntimeError("Error uploading chunk, status: " + str(r.status_code))
 
 
 def api_get_server_backup_size(token):
-    url = URL_ROOT + "/me/drive/root:/ServerBackup"
+    urls = config_get_urls()
+    upload_pairs = config_get_paths()["upload_pairs"]
+
+    url = urls["url_root"] + urls["directory_sub"].format(directory=upload_pairs[0]["server_dir"])
     r = requests.get(url, headers=api_create_get_header(token))
-    return r.json()["size"]
+    r_parsed = r.json()
+    if "size" not in r_parsed.keys():
+        raise RuntimeError("Unexpected error getting server directory size")
+    else:
+        return r.json()["size"]
 
 
 def api_get_all_backups(token, file_id):
-    url = URL_ROOT + "/me/drive/items/" + file_id + "/children"
+    urls = config_get_urls()
+
+    url = urls["url_root"] + urls["directory_children_sub"].format(file_id=file_id)
     r = requests.get(url, headers=api_create_get_header(token))
-    children = r.json()["value"]
+    r_parsed = r.json()
+
+    if "value" not in r_parsed.keys():
+        raise RuntimeError("Unexpected error getting server backups")
+    else:
+        children = r.json()["value"]
+
     filenames = []
     for child in children:
         filenames.append(child["name"])
     return filenames
+
+
+def api_delete_file(token, file_id):
+    urls = config_get_urls()
+
+    url = urls["url_root"] + urls["file_id_sub"].format(file_id=file_id)
+    r = requests.delete(url, headers=api_create_get_header(token))
+    if not check_200_status(r.status_code):
+        raise RuntimeError("Error clearing file to restore backup size, exiting. Status: " + str(r.status_code))

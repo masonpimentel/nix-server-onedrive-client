@@ -5,13 +5,13 @@ from fsplit.filesplit import FileSplit
 
 
 def maintain_size(token, file_id):
+    limits = config_get_limits()
     backup_size = api_get_server_backup_size(token)
-    while backup_size > BACKUP_MAX_SIZE:
-        print("Current backup size: " + str(backup_size / 1024 / 1024) + "MB")
+
+    while backup_size > limits["backup_max_size"]:
+        print_message("Current backup size: " + "{:.0f}".format(backup_size / 1024 / 1024) + " MB", "UPLOAD", "verbose")
         delete_oldest(token, file_id)
         backup_size = api_get_server_backup_size(token)
-    else:
-        return
 
 
 def delete_oldest(token, file_id):
@@ -19,7 +19,7 @@ def delete_oldest(token, file_id):
     files.sort()
     oldest = files[0]
     file_id = api_get_file_id(token, oldest)
-    print("Deleting " + file_id)
+    print_message("Deleting " + file_id, "UPLOAD", "verbose")
     api_delete_file(token, file_id)
 
 
@@ -43,13 +43,11 @@ def create_upload_dict():
         "total_size": fs_get_upload_size()
     }
 
-    for key in upload_dict.keys():
-        if not upload_dict[key]:
-            return None
-
     return upload_dict
 
 def main():
+    # TODO: check server backup size is correct before continuing
+
     limits = config_get_limits()
     paths = config_get_paths()
 
