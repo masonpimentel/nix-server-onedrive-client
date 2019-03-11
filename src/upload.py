@@ -1,7 +1,7 @@
-from fs import *
 from api import *
 
 from fsplit.filesplit import FileSplit
+import tempfile
 
 
 def maintain_size(token, file_id):
@@ -23,8 +23,8 @@ def delete_oldest(token, file_id):
     api_delete_file(token, file_id)
 
 
-def get_chunks():
-    files = os.listdir(".")
+def get_chunks(tmpdirname):
+    files = os.listdir(tmpdirname)
     chunks = []
     filename = fs_get_local_filename().split(".")[0]
     for file in files:
@@ -42,7 +42,6 @@ def create_upload_dict():
         "upload_url": api_create_upload_session(token),
         "total_size": fs_get_upload_size()
     }
-
     return upload_dict
 
 def main():
@@ -50,34 +49,29 @@ def main():
 
     limits = config_get_limits()
     paths = config_get_paths()
-
     upload_dict = create_upload_dict()
-    if not upload_dict:
-        return
 
     total_size = upload_dict["total_size"]
+    # TODO: make this iterate through all the paths
     if total_size > limits["upload_partition_limit"]:
         limit = limits["upload_partition_limit"]
-        limit_mb = str(limit / 1024 / 1024)
-        upload_url = upload_dict["upload_url"]
-        local_dir = paths["upload_pairs"][0]["local_dir"]
-        print_message("Greater than " + limit_mb + "MB - need to split into chunks", "UPLOAD", "verbose")
+        print_message("Greater than " + str(limit / 1024 / 1024) + "MB - need to split into chunks", "UPLOAD", "verbose")
 
-        # TODO: make this iterate through all the paths
-        fs = FileSplit(file=local_dir, splitsize=limit)
-        # TODO this should be done in a tmp directory and garbage collected
-        fs.split()
-        chunks = get_chunks()
-        start_byte = 0
-        for chunk_name in chunks:
-            chunk_size = fs_get_chunk_size(chunk_name)
-            if chunk_size > limit:
-                print_message("There was a problem partitioning the tar file", "UPLOAD", "error")
-                return
-            with open(chunk_name, 'rb') as chunk:
-                payload = chunk.read()
-            api_upload_chunk(upload_url, start_byte, start_byte + chunk_size - 1, total_size, payload)
-            start_byte += chunk_size
+        with tempfile.TemporaryDirectory(dir=fs_get_parent_dir()) as tmpdirname:
+            print_message("Created temporary directory: " + tmpdirname, "UPLOAD", "verbose")
+            fs = FileSplit(file=paths["upload_pairs"][0]["local_dir"], splitsize=limit, output_dir=tmpdirname)
+            fs.split()
+            chunks = get_chunks(tmpdirname)
+            start_byte = 0
+            for chunk_name in chunks:
+                chunk_path = fs_get_chunk_full_path(tmpdirname, chunk_name)
+                chunk_size = fs_get_chunk_size(chunk_path)
+                if chunk_size > limit:
+                    raise RuntimeError("There was a problem partitioning the tar file")
+                with open(chunk_path, 'rb') as chunk:
+                    payload = chunk.read()
+                api_upload_chunk(upload_dict["upload_url"], start_byte, start_byte + chunk_size - 1, total_size, payload)
+                start_byte += chunk_size
     else:
         print_message("Uploading entire file in one chunk", "UPLOAD", "verbose")
         with open(paths["upload_pairs"][0]["local_dir"], 'rb') as file:
@@ -86,7 +80,7 @@ def main():
             return
 
     # need to keep within 50 GB
-    #maintain_size(token, file_id)
+    maintain_size(upload_dict["token"], upload_dict["file_id"])
 
 
 if __name__ == '__main__':

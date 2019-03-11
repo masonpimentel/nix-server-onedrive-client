@@ -24,3 +24,11 @@ def fs_get_upload_size():
 
 def fs_get_chunk_size(filename):
     return os.stat(filename).st_size
+
+
+def fs_get_parent_dir():
+    return os.path.dirname(os.getcwd())
+
+
+def fs_get_chunk_full_path(tmpdirname, chunk_name):
+    return os.path.join(tmpdirname, chunk_name)

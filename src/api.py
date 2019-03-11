@@ -73,7 +73,6 @@ def api_get_file_id(token, filename):
     upload_pairs = config_get_paths()["upload_pairs"]
 
     if filename is None:
-        #TODO make this work with multiple paths
         url = urls["url_root"] + urls["directory_sub"].format(directory=upload_pairs[0]["server_dir"])
     else:
         url = urls["url_root"] + urls["directory_filename_sub"].format(directory=upload_pairs[0]["server_dir"], filename=filename)
