@@ -1,7 +1,7 @@
 ## Unix Server OneDrive Client
 
 
-This application will allow you to upload and download directories to and from a Unix-based server. The primary application of this is backup redundancy using your OneDrive service. This would allow you to have a cloud backup of your server directories (such as a directory of Git repositories) and conversely an on-premise backup of your cloud directories.
+This application will allow you to upload directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is backup redundancy using your OneDrive service for important directories such as a Git remote.
 
 This README is more of a guide and includes instructions on everything from setting up your (microsoft project), to setting up the Python application and setting up the cron jobs on your server.
 
@@ -26,27 +26,34 @@ https://apps.dev.microsoft.com/
 
 Once you've signed in, click on "Add an app". Give your app a name and click on "Create application".
 
-Screen1
-Creating the Microsoft application
+![](documentation/screenshots/screen1.png) |
+------------ | 
+_Creating the Microsoft application_ |
+
 
 First thing you want to do is generate a new application secret in password form. So click on "Generate New Password". Be sure to save the client secret! You'll eventually enter this in your configuration file.
 
-Screen2
-Getting a client secret
+![](documentation/screenshots/screen2.png) |
+------------ | 
+_Getting a client secret_ |
 
 Next you're going to want to add your platform. We're going to authenticate in the browser so click on "Add Platform", then "Web"
 
-Screen3
-Adding the web platform
+
+![](documentation/screenshots/screen3.png) |
+------------ | 
+_Adding the web platform_ |
 
 Add the following as the redirect URL: `http://localhost:8000/unix-server-onedrive-client/callback`. If you decide to go with something different you'd have to change the url in the config, see TODO section below.
 
-Screen4
-Adding the redirect URL
+![](documentation/screenshots/screen4.png) |
+------------ | 
+_Adding the redirect URL_ |
 
 The default permissions work for the purposes of the app. Click on "Save" at the bottom to save your changes.
 
 Before leaving, save your application ID.
 
-Screen5
-Saving the application ID
+![](documentation/screenshots/screen5.png) |
+------------ | 
+_Saving the application ID_ |
