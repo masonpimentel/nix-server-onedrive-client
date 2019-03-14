@@ -1,10 +1,8 @@
 import requests
-import json
 from fs import *
 from debugging import *
 from utils import *
 
-#TODO need to handle incorrect refresh token
 
 def api_create_urlencoded_header():
     return {
@@ -25,7 +23,6 @@ def check_200_status(code):
 
 def api_upload_error_parser(response, generic_msg):
     print_message(generic_msg, "UPLOAD", "error")
-    # TODO error handle incorrectly configured local or server dir
     if "error_description" in response.keys():
         print_message("Error description: " + response["error_description"], "UPLOAD", "error")
 

@@ -59,7 +59,7 @@ def main():
 
         with tempfile.TemporaryDirectory(dir=fs_get_parent_dir()) as tmpdirname:
             print_message("Created temporary directory: " + tmpdirname, "UPLOAD", "verbose")
-            fs = FileSplit(file=paths["upload_pairs"][0]["local_dir"], splitsize=limit, output_dir=tmpdirname)
+            fs = FileSplit(file=paths["upload_pairs"][0]["local_tar"], splitsize=limit, output_dir=tmpdirname)
             fs.split()
             chunks = get_chunks(tmpdirname)
             start_byte = 0
@@ -74,7 +74,7 @@ def main():
                 start_byte += chunk_size
     else:
         print_message("Uploading entire file in one chunk", "UPLOAD", "verbose")
-        with open(paths["upload_pairs"][0]["local_dir"], 'rb') as file:
+        with open(paths["upload_pairs"][0]["local_tar"], 'rb') as file:
             payload = file.read()
         if not api_upload_chunk(upload_dict["upload_url"], 0, total_size-1, total_size, payload):
             return
