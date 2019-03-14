@@ -1,7 +1,7 @@
 ## Unix Server OneDrive Client
 
 
-This application will allow you to upload directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is backup redundancy using your OneDrive service for important directories such as a Git remote.
+This application will allow you to automate uploading directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is backup redundancy using your OneDrive service for critical directories such as a Git remote.
 
 This README is more of a guide and includes instructions on everything from setting up your (microsoft project), to setting up the Python application and setting up the cron jobs on your server.
 
@@ -17,10 +17,14 @@ The guide consists of the following:
 - Setting up the Python application that implements the logic required to utilize the above services
 - Setting up the cronjobs that can be run on a Unix-based server to execute the Python application at a given interval
 
+What you will need:
+- A machine with a scheduler that can run Python - ideally with 24/7 availability
+- Access to a Microsoft account for creating the application
+- Access to the Microsoft account with OneDrive storage provisioned (this can be the same as the account used to create the application)
 
 ### Create Microsoft Application
 
-In order to use Microsoft's services API which is referred to as Microsoft Graph, you will need to use your Microsoft account to register an application. To do so, visit their application registration portal:
+In order to use Microsoft's services API which is referred to as Microsoft Graph, you will need to use your account to register an application. To do so, visit their application registration portal:
 
 https://apps.dev.microsoft.com/
 
@@ -57,3 +61,102 @@ Before leaving, save your application ID.
 ![](documentation/screenshots/screen5.png) |
 ------------ | 
 _Saving the application ID_ |
+
+### Set up Python Application
+
+#### Clone repository
+
+Make sure you're in the directory where you want to run the Python application and Cronjob from. The rest of these steps will denote the current directory by `<path>`
+
+```
+$ git clone https://github.com/snxfz947/unix-server-onedrive-client.git
+```
+
+Alternatively, if you want to use SSH:
+
+```
+$ git clone git@github.com:snxfz947/unix-server-onedrive-client.git
+```
+
+#### Install relevant tools
+
+To run the Python application you will need to install Python as well as some dependencies.
+
+##### Python
+
+The steps you take to install Python largely depends on the OS or distribution you're using. Chances are you already have Python installed or it was there by default. **The most important thing is that you have Python 3** (not Python 2). You will also need [pip](https://en.wikipedia.org/wiki/Pip_(package_manager)) for Python 3. Here are the steps for installing from the Python docs:
+
+https://docs.python-guide.org/starting/install3/linux/
+
+If you decided to go with Ubuntu 18.04 server, Python 3 is already installed but pip can be installed using the following:
+
+```
+$ sudo apt-get install python3-pip
+``` 
+
+Check your Python version using the `-V` argument:
+
+```
+$ python3 -V
+Python 3.6.5
+```
+
+Note that for the particular Ubuntu server version `python3` is used to invoke Python 3, `python` runs Python 2. Similarly for pip, `pip3` is used to invoke the package manager for Python 3.
+
+Check that `pip3` is set up correctly:
+
+```
+$ pip3 -V
+pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
+```
+
+##### Dependencies
+
+Run the following:
+
+
+```
+$ pip3 install filesplit requests
+```
+
+#### Complete configuration JSON
+
+
+
+ST
+
+##### Required fields
+
+client_id
+
+client_secret
+
+upload_pairs.local_dir
+upload_pairs.server_dir
+
+##### Optional/adjustable fields
+
+##### Verbosity settings
+
+#### Configure token
+
+We will now use our credentials to get our API token for sending requests to our application.
+
+Run the `config` script:
+
+```
+$ cd <path>/unix-server-onedrive-client
+$ ./config
+```
+
+### Using the App
+
+#### Running for the First Time
+
+#### Viewing Logs
+
+#### Clearing Logs
+
+#### Kill the App
+
+### Scheduling Runs Using Cron
