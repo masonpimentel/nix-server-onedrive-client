@@ -1,4 +1,8 @@
 #!/bin/bash
 
-cd src
-python3 config.py
+# insert repo_path into config
+
+cat config.json | jq --arg dir $(pwd) '.paths.repo_path = $dir'
+
+#cd src
+#python3 config.py
