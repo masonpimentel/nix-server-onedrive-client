@@ -4,17 +4,30 @@ epoch=$(date +%s)
 tdate=$(date "+%F-%T")
 ftdate=${tdate//":"/"-"}
 
-# iterate through each path
-cat config.json | jq -c '.paths.upload_pairs[]' |
-while read pair; do
-    n=$(echo $pair | jq -r '.local_dir')
-    filename=$n"_"$epoch"_"$ftdate".tar.gz"
-    echo $filename
-done	
+repo_path=$(cat config.json | jq -r '.paths.repo_path')    
+mkdir $repo_path/.tmp
 
-#path="repo-onedrive-backup/"
+# iterate through each path
+tar_paths=()
+while read pair; do
+    filepath=$(echo $pair | jq -r '.local_dir')
+    filename=$(basename $filepath)
+    ts_filename=$epoch"_"$ftdate"_"$filename".tar.gz"
+
+    tar_paths+=($ts_filename)
+
+    #tar -zcf $repo_path/.tmp/$ts_filename $filepath
+    #echo $repo_path
+done < <(cat config.json | jq -c '.paths.upload_pairs[]') 	
 
 #echo "Creating" $filename "..."
+
+i=0
+for path in ${tar_paths[@]}; do
+    cat config.json | jq --arg i $i --arg path $path '.paths.upload_pairs[$i | tonumber].local_tar |= $path' > config.tmp.json
+    mv config.tmp.json config.json
+    ((i++))    
+done
 
 #cd /home/snxfz-app/
 #tar -zcf $path$filename private_repos/
