@@ -4,16 +4,30 @@ epoch=$(date +%s)
 tdate=$(date "+%F-%T")
 ftdate=${tdate//":"/"-"}
 
-filename="backup_"$epoch"_"$ftdate".tar.gz"
-path="repo-onedrive-backup/"
+repo_path=$(cat config.json | jq -r '.paths.repo_path')    
+tmp_path=$repo_path/.tmp
 
-echo "Creating" $filename "..."
+mkdir $tmp_path 
+# iterate through each path
+tar_paths=()
+while read pair; do
+    filepath=$(echo $pair | jq -r '.local_dir')
+    filename=$(basename $filepath)
+    ts_filename=$epoch"_"$ftdate"_"$filename".tar.gz"
 
-cd /home/snxfz-app/
-tar -zcf $path$filename private_repos/
+    tar_paths+=($tmp_path/$ts_filename)
 
-cd $path
-python3 upload.py $filename
+    tar -zcf $tmp_path/$ts_filename $filepath  
+done < <(cat config.json | jq -c '.paths.upload_pairs[]') 	
 
-echo "Cleaning up..."
-rm $filename
+i=0
+for path in ${tar_paths[@]}; do
+    cat config.json | jq --arg i $i --arg path $path '.paths.upload_pairs[$i | tonumber].local_tar |= $path' > config.tmp.json
+    mv config.tmp.json config.json
+    ((i++))    
+done
+
+cd $repo_path/src
+python3 upload.py
+
+rm -rf $tmp_path
