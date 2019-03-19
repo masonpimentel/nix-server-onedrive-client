@@ -5,8 +5,9 @@ tdate=$(date "+%F-%T")
 ftdate=${tdate//":"/"-"}
 
 repo_path=$(cat config.json | jq -r '.paths.repo_path')    
-mkdir $repo_path/.tmp
+tmp_path=$repo_path/.tmp
 
+mkdir $tmp_path 
 # iterate through each path
 tar_paths=()
 while read pair; do
@@ -14,13 +15,10 @@ while read pair; do
     filename=$(basename $filepath)
     ts_filename=$epoch"_"$ftdate"_"$filename".tar.gz"
 
-    tar_paths+=($ts_filename)
+    tar_paths+=($tmp_path/$ts_filename)
 
-    #tar -zcf $repo_path/.tmp/$ts_filename $filepath
-    #echo $repo_path
+    tar -zcf $tmp_path/$ts_filename $filepath  
 done < <(cat config.json | jq -c '.paths.upload_pairs[]') 	
-
-#echo "Creating" $filename "..."
 
 i=0
 for path in ${tar_paths[@]}; do
@@ -29,11 +27,7 @@ for path in ${tar_paths[@]}; do
     ((i++))    
 done
 
-#cd /home/snxfz-app/
-#tar -zcf $path$filename private_repos/
+cd $repo_path/src
+python3 upload.py
 
-#cd $path
-#python3 upload.py $filename
-
-#echo "Cleaning up..."
-#rm $filename
+rm -rf $tmp_path
