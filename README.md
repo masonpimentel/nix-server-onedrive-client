@@ -112,11 +112,16 @@ pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
 
 ##### Dependencies
 
-Run the following:
-
+Run the following to install the necessary Python packages:
 
 ```
 $ pip3 install filesplit requests
+```
+
+Run the following (on Ubuntu at least) to install jq:
+
+```
+$ sudo apt install jq
 ```
 
 #### Complete configuration JSON
