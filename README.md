@@ -126,7 +126,7 @@ $ sudo apt install jq
 
 #### Complete configuration JSON
 
-
+For running the app, the only configuration file that needs to be modified is the `user_config.json` file. `dev_config.json` contains all the configuration values that would be modified for development purposes only. 
 
 ST
 
@@ -160,8 +160,25 @@ $ ./config
 
 #### Viewing Logs
 
+To see the logs, open `<path>/unix-server-onedrive-client/output.txt` This can be done by running:
+
+```
+$ cat <path>/unix-server-onedrive-client/output.txt
+```
+
+![](documentation/screenshots/screen18.png) |
+------------ | 
+_Viewing the logs_ |
+
+Here you can see that the cronjob detected that the app was not running, so it started it up. This is indicated by the `CRONJOB:` tag. You can also see that `receive` has started, and `send` has sent it's first message.
+
 #### Clearing Logs
 
-#### Kill the App
+To clear the logs, run:
+
+```
+$ cd <path>/unix-server-onedrive-client
+$ ./clear
+```
 
 ### Scheduling Runs Using Cron

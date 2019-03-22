@@ -30,6 +30,8 @@ for path in ${tar_paths[@]}; do
     python3 -u logger.py "Adding path for $path" "verbose" >> ../output.txt
     cd ..
 
+    # this should just be an array of strings
+    # cat dev_config.json | jq --arg path $path '.paths.upload_pairs += ["$path"]'
     cat config.json | jq --arg i $i --arg path $path '.paths.upload_pairs[$i | tonumber].local_tar |= $path' > config.tmp.json
     mv config.tmp.json config.json
     ((i++))    
