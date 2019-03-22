@@ -28,14 +28,15 @@ def api_upload_error_parser(response, generic_msg):
 
 
 def api_get_refresh_token():
-    urls = config_get_urls()
-    auth = config_get_auth()
-    req_bodies = config_get_req_bodies()
+    dev_urls = config_get_dev_urls()
+    dev_auth = config_get_dev_auth()
+    req_bodies = config_get_dev_req_bodies()
+    user_auth = config_get_user_auth()
 
     h = api_create_urlencoded_header()
     b = req_bodies["api_get_refresh_token_sub"]
-    b = b.format(client_id=auth["client_id"], client_secret=auth["client_secret"], redirect_uri=urls["redirect_uri"], auth_code=auth["auth_code"])
-    r = requests.post(urls["api_get_refresh_token"], data=b, headers=h)
+    b = b.format(client_id=user_auth["client_id"], client_secret=user_auth["client_secret"], redirect_uri=dev_urls["redirect_uri"], auth_code=dev_auth["auth_code"])
+    r = requests.post(dev_urls["api_get_refresh_token"], data=b, headers=h)
     r_parsed = r.json()
     if "error" in r_parsed.keys():
         if r_parsed["error"] == "invalid_grant":
@@ -53,7 +54,7 @@ def api_get_refresh_token():
 
 
 def api_get_token():
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
 
     h = api_create_urlencoded_header()
     r = requests.post(urls["api_get_refresh_token"], data=config_get_req_bodies()["refresh_body"], headers=h)
@@ -66,7 +67,7 @@ def api_get_token():
 
 
 def api_get_file_id(token, filename):
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
     upload_pairs = config_get_paths()["upload_pairs"]
 
     if filename is None:
@@ -82,7 +83,7 @@ def api_get_file_id(token, filename):
 
 
 def api_create_upload_session(token):
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
 
     server_filename = fs_get_filename(config_get_paths()["upload_pairs"][0]["server_dir"])
     url = urls["url_root"] + urls["directory_sub"].format(directory=server_filename) + "/" + fs_get_local_filename() + ":/createUploadSession"
@@ -108,7 +109,7 @@ def api_upload_chunk(url, bottom, top, total, payload):
 
 
 def api_get_server_backup_size(token):
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
     upload_pairs = config_get_paths()["upload_pairs"]
 
     url = urls["url_root"] + urls["directory_sub"].format(directory=upload_pairs[0]["server_dir"])
@@ -121,7 +122,7 @@ def api_get_server_backup_size(token):
 
 
 def api_get_all_backups(token, file_id):
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
 
     url = urls["url_root"] + urls["directory_children_sub"].format(file_id=file_id)
     r = requests.get(url, headers=api_create_get_header(token))
@@ -139,7 +140,7 @@ def api_get_all_backups(token, file_id):
 
 
 def api_delete_file(token, file_id):
-    urls = config_get_urls()
+    urls = config_get_dev_urls()
 
     url = urls["url_root"] + urls["file_id_sub"].format(file_id=file_id)
     r = requests.delete(url, headers=api_create_get_header(token))

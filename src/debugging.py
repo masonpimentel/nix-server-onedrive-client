@@ -13,7 +13,7 @@ def format_prefix(padding, body):
 
 
 def print_message(message, type_prefix, message_type):
-    verbosity = config_get_verbosity()
+    verbosity = config_get_user_verbosity()
 
     if message_type == "info":
         print(str(time.strftime("%c")) + format_type(12, "INFO") + format_prefix(12, type_prefix) + message)
