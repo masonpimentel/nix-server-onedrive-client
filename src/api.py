@@ -57,7 +57,7 @@ def api_get_token():
     urls = config_get_dev_urls()
 
     h = api_create_urlencoded_header()
-    r = requests.post(urls["api_get_refresh_token"], data=config_get_req_bodies()["refresh_body"], headers=h)
+    r = requests.post(urls["api_get_refresh_token"], data=config_get_dev_req_bodies()["refresh_body"], headers=h)
     r_parsed = r.json()
     if "access_token" not in r_parsed.keys():
         api_upload_error_parser(r_parsed, "Unexpected error getting token")
