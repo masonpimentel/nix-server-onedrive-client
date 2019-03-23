@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # insert repo_path into config
-cat config.json | jq --indent 4 --sort-keys --arg dir $(pwd) '.paths.repo_path |= $dir' > tmp_config.json
-mv tmp_config.json config.json
+cat dev_config.json | jq --indent 4 --sort-keys --arg dir $(pwd) '.paths.repo_path |= $dir' > tmp_config.json
+mv tmp_config.json dev_config.json
 
 cd src
 python3 config.py
