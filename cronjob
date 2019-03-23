@@ -4,40 +4,52 @@ epoch=$(date +%s)
 tdate=$(date "+%F-%T")
 ftdate=${tdate//":"/"-"}
 
-repo_path=$(cat config.json | jq -r '.paths.repo_path')    
+repo_path=$(cat dev_config.json | jq -r '.paths.repo_path')
 tmp_path=$repo_path/.tmp
 
 mkdir $tmp_path 
+
+function logger {
+    cd $repo_path/src
+    python3 -u logger.py "$1" "$2" >> ../output.txt
+    cd ..
+}
+
 # iterate through each path
 tar_paths=()
 while read pair; do
     filepath=$(echo $pair | jq -r '.local_dir')
+
+    if [[ $filepath == "fill_me_in" ]]; then
+        logger "Upload pairs in user_config.json not configured" "error"
+        exit
+    fi
+
     filename=$(basename $filepath)
     ts_filename=$epoch"_"$ftdate"_"$filename".tar.gz"
 
     tar_paths+=($tmp_path/$ts_filename)
 
-    cd src
-    python3 -u logger.py "Created $ts_filename" "verbose" >> ../output.txt
-    cd ..
+    logger "Created $ts_filename" "verbose"
 
     tar -zcf $tmp_path/$ts_filename $filepath &>/dev/null
-done < <(cat config.json | jq -c '.paths.upload_pairs[]') 	
+done < <(cat user_config.json | jq -c '.paths.upload_pairs[]')
+
+cat dev_config.json | jq '.paths.upload_pairs = []' > config.tmp.json
+mv config.tmp.json dev_config.json
 
 i=0
 for path in ${tar_paths[@]}; do
-    cd src
-    python3 -u logger.py "Adding path for $path" "verbose" >> ../output.txt
-    cd ..
+    logger "Adding path for $path" "verbose" >> ../output.txt
 
-    cat config.json | jq --arg i $i --arg path $path '.paths.upload_pairs[$i | tonumber].local_tar |= $path' > config.tmp.json
-    mv config.tmp.json config.json
+    cat dev_config.json | jq --arg path $path '.paths.upload_pairs += [$path]' > config.tmp.json
+    mv config.tmp.json dev_config.json
     ((i++))    
 done
 
-cd src
-python3 -u logger.py "Running upload" "verbose" >> ../output.txt
+logger "Running upload" "verbose"
+cd $repo_path/src
 python3 -u upload.py >> ../output.txt
 
-python3 -u logger.py "Cleaning up" "verbose" >> ../output.txt
+logger "Cleaning up" "verbose"
 rm -rf $tmp_path
