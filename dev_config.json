@@ -5,6 +5,7 @@
     },
     "paths": {
         "download_pairs": [],
+        "repo_path": "",
         "upload_pairs": []
     },
     "req_bodies": {
