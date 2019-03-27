@@ -6,7 +6,7 @@
     "limits": {
         "@backup_max_note": "5 * 1024 * 1024 * 1024 = 5GB = 5368709120",
         "@upload_partition_limit_note": "60 * 1024 * 1024 = 60MB = 62914560",
-        "backup_max_size": 83886080,
+        "backup_max_size": 5368709120,
         "upload_partition_limit": 62914560
     },
     "paths": {
