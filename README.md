@@ -1,22 +1,24 @@
 ## Unix Server OneDrive Client
 
 
-This application will allow you to automate uploading directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is backup redundancy using your OneDrive service for critical directories such as a Git remote.
+This application will allow you to automate uploading directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is creating an off-premise cloud backup using your OneDrive service for critical directories such as a Git remote.
 
 ![](documentation/unix-server-onedrive-client.png) |
 ------------ | 
-_High level design_ | 
+_Concept_ | 
 
-It takes a list of mappings of a directories on the server that are uploaded to the specified directory in OneDrive. The server directory is compressed into `.tar.gz` format before being uploaded. 
+It takes a list of mappings of directories on the server that are uploaded to the specified directory/directories in OneDrive. The server directory is compressed into `.tar.gz` format before being uploaded. 
 
-- create diagram showing mappings
+![](documentation/assets/many-to-many-mapping.png) |
+------------ | 
+_Illustrating the possible many-to-many mapping of server to OneDrive directories_ |
 
 This README is more of a guide and includes instructions on everything from setting up your Microsoft project, to setting up the Python application and setting up the cron jobs on your server.
 
 It consists of the following parts:
 
 - Using the Microsoft application registration portal to set up your OneDrive service API
-- Setting up the Python application that implements the logic required to utilize the API
+- Setting up the Python application that utilizes the API
 - Setting up the cronjobs that can be run on a Unix-based server to execute the Python application at a given interval
 
 Note that this guide assumes you are using a Unix cron scheduler but theoretically you could run this from any machine as long as it has a scheduler and can run Python. In this case we would normally call this machine the 'server' but actually the way it's applied here it's more of a client from how it will be interacting with Microsoft's service API.
@@ -45,7 +47,7 @@ First thing you want to do is generate a new application secret in password form
 ------------ | 
 _Getting a client secret_ |
 
-Next you're going to want to add your platform. We're going to authenticate in the browser so click on "Add Platform", then "Web"
+Next you're going to want to add your platform. We're going to authenticate in the browser so click on "Add Platform", then "Web".
 
 
 ![](documentation/screenshots/screen3.png) |
@@ -67,6 +69,8 @@ Before leaving, save your application ID. You'll enter this in the configuration
 _Saving the application ID_ |
 
 ### Set up Python Application
+
+This section describes how to set up your environment to run the Python application, including pulling the code, installing necessary tools and depencencies, getting your API token and configuring the app.
 
 #### Clone repository
 
@@ -136,7 +140,7 @@ For running the app, the only configuration file that needs to be modified is th
 
 * `client_id` - you should have this from the `Create Microsoft Application` section
 * `client_secret` - you should also have this from the `Create Microsoft Application` section
-* `backup_max_size` - this is the maxiumum size for all OneDrive upload directories. This means if a directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 5 GB - change this to the desired size.
+* `backup_max_size` - this is the maxiumum size for all OneDrive upload directories. This means if a directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 5 GB - change this to the desired size (in bytes).
 * `upload_partition_limit` - this should be left alone
 * `upload_pairs` - these are the mappings for the directory on your server that will be uploaded in `.tar.gz` format to the directory in your OneDrive storage. It is an array so you can add as many mappings as you wish. The array expects objects with a `local_dir` string property which should be an absolute path specifying the directory on the server that will be backed up, and `server_dir` string property which should be an absolute path specifying the directory in your OneDrive storage in which the tar will be placed.
 ```
@@ -168,7 +172,18 @@ $ ./config
 
 ### Using the App
 
+This section describes how to manually execute the app (the last section explains how to set it up to run automatically) and view the execution logs.
+
 #### Running for the First Time
+
+Before making the first test run, it would be a good idea to change the `verbosity.verbose` setting to `true` (from the previous `Complete configuration JSON` section)
+
+You can make a manual run by running:
+
+```
+$ cd <path>/unix-server-onedrive-client
+$ ./cronjob &
+```
 
 #### Viewing Logs
 
@@ -194,3 +209,23 @@ $ ./clear
 ```
 
 ### Scheduling Runs Using Cron
+
+To open the [crontab](http://man7.org/linux/man-pages/man5/crontab.5.html) run:
+
+```
+$ crontab -e
+```
+
+This should open the file in your preferred editor. On a fresh Ubuntu instance it will let you choose which editor you want to use - if you're not sure, enter "2". You want to enter the following at the end of the file, replacing `<path>` according to the actual path where you cloned the repository:
+
+```
+0 */12 * * * <path>/unix-server-onedrive-client/cronjob
+```
+
+If you're not sure what's happening at this point, you're in the [vim](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started) editor. Just press "j" until your cursor reaches the bottom, "o" to start editing, then copy+paste the above if your shell terminal allows it, otherwise enter it in manually. Then press ESC to exit editor mode, ":" (colon), "wq" then ENTER to save and exit. 
+
+![](documentation/screenshots/screen6.png) |
+------------ | 
+_Editing the crontab_ |
+
+This will run the script at 12AM and 12PM daily, as denoted by the `0` in the minutes column, the `*/12` for hours divisible by 12, and asterisks for the remaining columns. See [cronjob](cronjob).
