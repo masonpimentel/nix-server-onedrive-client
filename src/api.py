@@ -66,14 +66,14 @@ def api_get_token():
         return r.json()["access_token"]
 
 
-def api_get_file_id(token, filename):
+def api_get_file_id(token, filename, user_upload_pair_index):
     dev_urls = config_get_dev_urls()
     user_upload_pairs = config_get_user_paths()["upload_pairs"]
 
     if filename is None:
-        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[0]["server_dir"])
+        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"])
     else:
-        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=user_upload_pairs[0]["server_dir"], filename=filename)
+        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"], filename=filename)
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
@@ -82,11 +82,11 @@ def api_get_file_id(token, filename):
         return r.json()["id"]
 
 
-def api_create_upload_session(token):
+def api_create_upload_session(token, pair_index):
     dev_urls = config_get_dev_urls()
 
-    server_filename = fs_get_filename(config_get_user_paths()["upload_pairs"][0]["server_dir"])
-    url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=server_filename) + "/" + fs_get_local_filename() + ":/createUploadSession"
+    server_filename = fs_get_filename(config_get_user_paths()["upload_pairs"][pair_index]["server_dir"])
+    url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=server_filename) + "/" + fs_get_local_filename(pair_index) + ":/createUploadSession"
     r = requests.post(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "uploadUrl" not in r_parsed.keys():
@@ -108,11 +108,11 @@ def api_upload_chunk(url, bottom, top, total, payload):
         raise RuntimeError("Error uploading chunk, status: " + str(r.status_code))
 
 
-def api_get_server_backup_size(token):
+def api_get_server_backup_size(token, user_upload_pair_index):
     dev_urls = config_get_dev_urls()
     user_upload_pairs = config_get_user_paths()["upload_pairs"]
 
-    url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[0]["server_dir"])
+    url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"])
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "size" not in r_parsed.keys():
