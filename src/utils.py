@@ -1,4 +1,5 @@
 import json
+from debugging import *
 
 
 def config_get_dev():
@@ -41,3 +42,15 @@ def config_get_user_limits():
 
 def config_get_user_verbosity():
     return config_get_user()["verbosity"]
+
+
+def config_write_dev(new_config):
+    with open("../dev_config.json", "w") as config_file:
+        json.dump(new_config, config_file, indent=4, sort_keys=True)
+
+
+def config_clear_dev_auth_code():
+    dev_config = config_get_dev()
+    dev_config["auth"]["auth_code"] = ""
+    config_write_dev(dev_config)
+
