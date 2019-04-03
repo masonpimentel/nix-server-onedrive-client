@@ -40,10 +40,10 @@ def api_get_refresh_token():
     r_parsed = r.json()
     if "error" in r_parsed.keys():
         if r_parsed["error"] == "invalid_grant":
-            # TODO add section
-            print_message("Your auth code has expired. Please refer to TODO to get a new one.", "CONFIG", "error")
+            config_clear_dev_auth_code()
+            print_message("Either an incorrect auth code was entered or it has expired. Please re-run the config script - refer to the 'Set up Python Application' -> 'Configure Token' section of the README for more info.", "CONFIG", "error")
         elif r_parsed["error"] == "invalid_client":
-            print_message("Something went wrong with the client auth info you entered - either the client ID or client secret is incorrect. Please refer to the steps in TODO.", "CONFIG", "error")
+            print_message("Something went wrong with the client auth info you entered - either the client ID or client secret is incorrect", "CONFIG", "error")
         else:
             print_message("Unexpected error getting refresh token", "CONFIG", "error")
             if "error_description" in r_parsed.keys():
