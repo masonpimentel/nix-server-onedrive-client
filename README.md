@@ -1,7 +1,7 @@
 ## Unix Server OneDrive Client
 
 
-This application will allow you to automate uploading directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is creating an off-premise cloud backup using your OneDrive service for critical directories such as a Git remote.
+This application will allow you to automate backing up directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is creating an off-premise cloud backup using your OneDrive service for critical directories such as a Git remote.
 
 ![](documentation/unix-server-onedrive-client.png) |
 ------------ | 
@@ -170,7 +170,7 @@ $ cd <path>/unix-server-onedrive-client
 $ ./config
 ```
 
-![](documentation/screenshots/screen.png) |
+![](documentation/screenshots/screen9.png) |
 ------------ | 
 _Configuration prompt_ |
 
@@ -184,9 +184,13 @@ _Unable to connect to localhost port_ |
 
 Otherwise, you will then be prompted to login to your Microsoft account using their login portal (see the url and certificate). Go ahead and login to your account with OneDrive provisioned (this may or may not be the same as the one you used to create the Microsoft application).
 
-![](documentation/screenshots/screen.png) |
+![](documentation/screenshots/screen10.png) |
 ------------ | 
 _Using Microsoft's login portal to get an auth code_ |
+
+![](documentation/screenshots/screen11.png) |
+------------ | 
+_Double checking you're in the right place!_ |
 
 Once complete, as explained earlier, you will be redirected to a localhost address which will not load a page. However, the auth code you need will be in the url. See your browser's address in the url bar, and copy everything after `'code='` 
 
@@ -196,7 +200,7 @@ _Getting the auth code from your browser's url_ |
 
 This is the value you will need to enter in the console prompt.
 
-![](documentation/screenshots/screen.png) |
+![](documentation/screenshots/screen12.png) |
 ------------ | 
 _App and token successfully configured_ |
 
