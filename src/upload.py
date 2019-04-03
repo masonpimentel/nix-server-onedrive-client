@@ -40,7 +40,6 @@ def main():
     token = api_get_token()
 
     pair_index = 0
-    print(config_get_dev_paths()["upload_pairs"])
     for dev_upload_path in config_get_dev_paths()["upload_pairs"]:
         file_id = api_get_file_id(token, None, pair_index)
         upload_url = api_create_upload_session(token, pair_index)
