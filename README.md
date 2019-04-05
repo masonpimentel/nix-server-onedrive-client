@@ -227,11 +227,16 @@ To see the logs, open `<path>/unix-server-onedrive-client/output.txt` This can b
 $ cat <path>/unix-server-onedrive-client/output.txt
 ```
 
-![](documentation/screenshots/screen18.png) |
+![](documentation/screenshots/screen13.png) |
 ------------ | 
 _Viewing the logs_ |
 
-Here you can see that the cronjob detected that the app was not running, so it started it up. This is indicated by the `CRONJOB:` tag. You can also see that `receive` has started, and `send` has sent it's first message.
+Here you can see:
+
+* The directories are archived into `tar.gz` format, named as `<epoch>_<timedate>_<directory>.tar.gz`, done by the cronjob
+* A temporary directory is created for the archives, also done by the cronjob
+* The cronjob starts up the upload Python script
+* OneDrive has an upload partition limit size of 60MB so the Python upload script handles partitioning the archive into 60MB chunks
 
 #### Clearing Logs
 
