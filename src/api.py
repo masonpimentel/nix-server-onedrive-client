@@ -68,16 +68,21 @@ def api_get_token():
 
 def api_get_file_id(token, filename, user_upload_pair_index):
     dev_urls = config_get_dev_urls()
-    user_upload_pairs = config_get_user_paths()["upload_pairs"]
+    server_dir = config_get_user_paths()["upload_pairs"][user_upload_pair_index]["server_dir"]
 
     if filename is None:
-        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"])
+        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=server_dir)
+        basename = server_dir
     else:
-        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"], filename=filename)
+        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=server_dir, filename=filename)
+        basename = filename
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
-        raise RuntimeError("Unexpected error creating upload session")
+        if "error" in r_parsed.keys() and "code" in r_parsed["error"].keys():
+            raise RuntimeError("Could not find " + basename + " in OneDrive")
+        else:
+            raise RuntimeError("Unexpected error creating upload session")
     else:
         return r.json()["id"]
 
