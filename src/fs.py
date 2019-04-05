@@ -16,11 +16,10 @@ def fs_get_upload_size(dev_upload_pair_index):
     dev_paths = config_get_dev_paths()
     try:
         size = os.stat(dev_paths["upload_pairs"][dev_upload_pair_index]).st_size
-    except FileNotFoundError:
-        print_message("File '" + dev_paths["upload_pairs"][dev_upload_pair_index] + "' could not be found!", "UPLOAD", "error")
-        return None
-    return size
-
+        return size
+    except FileNotFoundError as e:
+        print_message("File path '" + dev_paths["upload_pairs"][dev_upload_pair_index] + "' could not be found!", "UPLOAD", "error")
+        raise e
 
 def fs_get_chunk_size(filename):
     return os.stat(filename).st_size
