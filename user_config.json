@@ -18,7 +18,7 @@
         ]
     },
     "verbosity": {
-        "debug": true,
-        "verbose": true
+        "debug": false,
+        "verbose": false
     }
 }

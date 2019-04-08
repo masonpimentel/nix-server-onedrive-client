@@ -40,10 +40,10 @@ def api_get_refresh_token():
     r_parsed = r.json()
     if "error" in r_parsed.keys():
         if r_parsed["error"] == "invalid_grant":
-            # TODO add section
-            print_message("Your auth code has expired. Please refer to TODO to get a new one.", "CONFIG", "error")
+            config_clear_dev_auth_code()
+            print_message("Either an incorrect auth code was entered or it has expired. Please re-run the config script - refer to the 'Set up Python Application' -> 'Configure Token' section of the README for more info.", "CONFIG", "error")
         elif r_parsed["error"] == "invalid_client":
-            print_message("Something went wrong with the client auth info you entered - either the client ID or client secret is incorrect. Please refer to the steps in TODO.", "CONFIG", "error")
+            print_message("Something went wrong with the client auth info you entered - either the client ID or client secret is incorrect", "CONFIG", "error")
         else:
             print_message("Unexpected error getting refresh token", "CONFIG", "error")
             if "error_description" in r_parsed.keys():
@@ -68,16 +68,21 @@ def api_get_token():
 
 def api_get_file_id(token, filename, user_upload_pair_index):
     dev_urls = config_get_dev_urls()
-    user_upload_pairs = config_get_user_paths()["upload_pairs"]
+    server_dir = config_get_user_paths()["upload_pairs"][user_upload_pair_index]["server_dir"]
 
     if filename is None:
-        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"])
+        url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=server_dir)
+        basename = server_dir
     else:
-        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"], filename=filename)
+        url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=server_dir, filename=filename)
+        basename = filename
     r = requests.get(url, headers=api_create_get_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
-        raise RuntimeError("Unexpected error creating upload session")
+        if "error" in r_parsed.keys() and "code" in r_parsed["error"].keys():
+            raise RuntimeError("Could not find " + basename + " in OneDrive")
+        else:
+            raise RuntimeError("Unexpected error creating upload session")
     else:
         return r.json()["id"]
 
