@@ -47,7 +47,7 @@ def main():
 
         if total_size > user_limits["upload_partition_limit"]:
             limit = user_limits["upload_partition_limit"]
-            print_message("Greater than " + str(limit / 1024 / 1024) + "MB - need to split into chunks", "UPLOAD", "verbose")
+            print_message("Greater than " + str(limit / 1024 / 1024) + " MB - need to split into chunks", "UPLOAD", "verbose")
 
             with tempfile.TemporaryDirectory(dir=fs_get_parent_dir()) as tmpdirname:
                 print_message("Created temporary directory: " + tmpdirname, "UPLOAD", "verbose")
