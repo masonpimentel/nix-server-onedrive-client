@@ -157,7 +157,7 @@ For running the app, the only configuration file that needs to be modified is th
     ]
 ```
 This can be a many-to-many mapping, meaning you can backup the same directory to multiple OneDrive directories, and vice-versa - you can backup multiple directories to the same OneDrive directory. 
-* `verbosity` - turn on `verbose` to see more log output. `debug` is more for development purposes.
+* `verbosity` - turn on `verbose` to see more log output. It is set to `true` by default. `debug` is more for development purposes.
 
 #### Configure token
 
@@ -209,8 +209,6 @@ _App and token successfully configured_ |
 This section describes how to manually execute the app (the last section explains how to set it up to run automatically) and view the execution logs.
 
 #### Running for the First Time
-
-Before making the first test run, it would be a good idea to change the `verbosity.verbose` setting to `true` (from the previous `Complete configuration JSON` section)
 
 You can make a manual run by running:
 
