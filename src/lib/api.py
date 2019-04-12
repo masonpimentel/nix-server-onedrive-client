@@ -1,7 +1,7 @@
 import requests
-from fs import *
-from debugging import *
-from utils import *
+from lib.fs import *
+from lib.debugging import *
+from lib.utils import *
 
 
 def api_create_urlencoded_header():

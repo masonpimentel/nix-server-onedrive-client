@@ -1,4 +1,4 @@
-from debugging import *
+from lib.debugging import *
 import argparse
 
 parser = argparse.ArgumentParser()

@@ -1,5 +1,5 @@
-from api import *
-from utils import *
+from lib.api import *
+from lib.utils import *
 
 
 def main():
