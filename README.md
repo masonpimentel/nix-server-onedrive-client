@@ -204,6 +204,17 @@ This is the value you will need to enter in the console prompt.
 ------------ | 
 _App and token successfully configured_ |
 
+##### Clear configuration
+
+If for any reason you need to clear your configuration, you can run the following:
+
+```
+$ cd <path>/unix-server-onedrive-client
+$ ./config clear
+```
+
+This will clear our your client ID and client secret in `user_config.json` as well as your refresh token in `dev_config.json`. Re-run the config script to re-configure the app.
+
 ### Using the App
 
 This section describes how to manually execute the app (the last section explains how to set it up to run automatically) and view the execution logs.
