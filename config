@@ -3,6 +3,9 @@
 if [[ $1 == "clear" ]]; then
     cd src
     python3 config.py --clear
+elif [[ $# -gt 0 ]]; then
+    cd src
+    python3 config.py --python_invoker $1
 else
     # insert repo_path into config
     cat dev_config.json | jq --indent 4 --sort-keys --arg dir $(pwd) '.paths.repo_path |= $dir' > tmp_config.json
