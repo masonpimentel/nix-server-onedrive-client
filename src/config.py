@@ -6,6 +6,7 @@ import argparse
 
 def setup_parser(parser):
     parser.add_argument("--clear", action="store_true", help="clear configuration including client id, client secret and refresh token")
+    parser.add_argument("--python_invoker", help="command used to invoke Python - default is python3")
 
 
 def clear_configuration():
@@ -50,6 +51,9 @@ def setup_refresh_token():
 def main():
     parser = argparse.ArgumentParser()
     setup_parser(parser)
+
+    if parser.parse_args().python_invoker:
+        print_message("Need to change invoker!", "CONFIG", "debug")
 
     if parser.parse_args().clear:
         clear_configuration()
