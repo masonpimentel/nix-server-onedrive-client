@@ -8,6 +8,7 @@
         "repo_path": "",
         "upload_pairs": []
     },
+    "python_invoker": "",
     "req_bodies": {
         "api_get_refresh_token_sub": "client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={auth_code}&grant_type=authorization_code",
         "refresh_body": "",

@@ -9,6 +9,13 @@ def setup_parser(parser):
     parser.add_argument("--python_invoker", help="command used to invoke Python - default is python3")
 
 
+def setup_invoker(invoker):
+    dev_config = config_get_dev()
+    dev_config["python_invoker"] = invoker
+    print_message("Setting Python invoker to " + invoker, "CONFIG", "info")
+    config_write_dev(dev_config)
+
+
 def clear_configuration():
     config_clear_user_auth()
     config_clear_dev_auth_code()
@@ -52,10 +59,11 @@ def main():
     parser = argparse.ArgumentParser()
     setup_parser(parser)
 
-    if parser.parse_args().python_invoker:
-        print_message("Need to change invoker!", "CONFIG", "debug")
+    invoker = parser.parse_args().python_invoker
 
-    if parser.parse_args().clear:
+    if invoker:
+        setup_invoker(invoker)
+    elif parser.parse_args().clear:
         clear_configuration()
     else:
         setup_refresh_token()
