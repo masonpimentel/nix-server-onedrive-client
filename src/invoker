@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat dev_config.json | jq '.python_invoker'

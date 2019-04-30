@@ -1,18 +1,23 @@
 #!/bin/bash
 
-if [[ $1 == "clear" ]]; then
-    cd src
-    python3 config.py --clear
-elif [[ $# -gt 0 ]]; then
-    cd src
-    python3 config.py --python_invoker $1
+invoker=$(src/invoker)
+
+if [[ "$invoker" == \"\" ]] && [[ $1 == "clear" || $# -lt 1 ]]; then
+    echo "Python invoker not set! Please run ./config <python invoker>, for example ./config python3"
+    echo "See TODO for more info"
 else
     # insert repo_path into config
     cat dev_config.json | jq --indent 4 --sort-keys --arg dir $(pwd) '.paths.repo_path |= $dir' > tmp_config.json
     mv tmp_config.json dev_config.json
 
     cd src
-    python3 config.py
+    if [[ $1 == "clear" ]]; then
+        $invoker config.py --clear
+    elif [[ $# -gt 0 ]]; then
+        $1 config.py --python_invoker $1
+    else
+        $invoker config.py
+    fi
 fi
 
 
