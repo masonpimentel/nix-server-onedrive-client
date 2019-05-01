@@ -118,6 +118,21 @@ $ pip3 -V
 pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
 ```
 
+##### Setting up Python invoker
+
+Now that we know what our Python invoker is (in the case above, it is `python3`) we need to configure the app to use this. To do so, run:
+
+```
+$ ./config <Python invoker>
+```
+
+For the example above, it would be:
+
+```
+$ cd <path>/unix-server-onedrive-client
+$ ./config python3
+```
+
 ##### Dependencies
 
 Run the following to install the necessary Python packages:
@@ -163,7 +178,7 @@ This can be a many-to-many mapping, meaning you can backup the same directory to
 
 We will now use our credentials to get our API token for sending requests to our application. This will also configure your refresh token so that the app will be able to retrieve future tokens on its own - you will only need to do the manual steps described here once.
 
-Run the `config` script:
+Run the `config` script with no arguments:
 
 ```
 $ cd <path>/unix-server-onedrive-client
