@@ -11,7 +11,7 @@ def api_create_urlencoded_header():
     }
 
 
-def api_create_get_header(token):
+def api_create_header(token):
     return {
         'Authorization': token,
         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ def api_get_file_id(token, filename, user_upload_pair_index):
     else:
         url = dev_urls["url_root"] + dev_urls["directory_filename_sub"].format(directory=server_dir, filename=filename)
         basename = filename
-    r = requests.get(url, headers=api_create_get_header(token))
+    r = requests.get(url, headers=api_create_header(token))
     r_parsed = r.json()
     if "id" not in r_parsed.keys():
         if "error" in r_parsed.keys() and "code" in r_parsed["error"].keys():
@@ -93,7 +93,7 @@ def api_create_upload_session(token, pair_index):
 
     server_filename = config_get_user_paths()["upload_pairs"][pair_index]["server_dir"]
     url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=server_filename) + "/" + fs_get_local_filename(pair_index) + ":/createUploadSession"
-    r = requests.post(url, headers=api_create_get_header(token))
+    r = requests.post(url, headers=api_create_header(token))
     r_parsed = r.json()
     if "uploadUrl" not in r_parsed.keys():
         raise RuntimeError("Unexpected error creating upload session")
@@ -119,7 +119,7 @@ def api_get_server_backup_size(token, user_upload_pair_index):
     user_upload_pairs = config_get_user_paths()["upload_pairs"]
 
     url = dev_urls["url_root"] + dev_urls["directory_sub"].format(directory=user_upload_pairs[user_upload_pair_index]["server_dir"])
-    r = requests.get(url, headers=api_create_get_header(token))
+    r = requests.get(url, headers=api_create_header(token))
     r_parsed = r.json()
     if "size" not in r_parsed.keys():
         raise RuntimeError("Unexpected error getting server directory size")
@@ -131,7 +131,7 @@ def api_get_all_backups(token, file_id):
     dev_urls = config_get_dev_urls()
 
     url = dev_urls["url_root"] + dev_urls["directory_children_sub"].format(file_id=file_id)
-    r = requests.get(url, headers=api_create_get_header(token))
+    r = requests.get(url, headers=api_create_header(token))
     r_parsed = r.json()
 
     if "value" not in r_parsed.keys():
@@ -149,7 +149,7 @@ def api_delete_file(token, file_id):
     dev_urls = config_get_dev_urls()
 
     url = dev_urls["url_root"] + dev_urls["file_id_sub"].format(file_id=file_id)
-    r = requests.delete(url, headers=api_create_get_header(token))
+    r = requests.delete(url, headers=api_create_header(token))
     if not check_200_status(r.status_code):
         raise RuntimeError("Error clearing file to restore backup size, exiting. Status: " + str(r.status_code))
 
