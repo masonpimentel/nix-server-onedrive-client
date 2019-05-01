@@ -1,4 +1,5 @@
 import requests
+import json
 from lib.fs import *
 from lib.debugging import *
 from lib.utils import *
@@ -151,3 +152,17 @@ def api_delete_file(token, file_id):
     r = requests.delete(url, headers=api_create_get_header(token))
     if not check_200_status(r.status_code):
         raise RuntimeError("Error clearing file to restore backup size, exiting. Status: " + str(r.status_code))
+
+
+def api_create_directory(token, parent_path, new_directory):
+    dev_urls = config_get_dev_urls()
+
+    url = dev_urls["url_root"] + dev_urls["path_children_sub"].format(path=parent_path)
+    b = json.dumps({
+        "name": new_directory,
+        "folder": {},
+        "@microsoft.graph.conflictBehavior": "replace"
+    })
+    h = api_create_header(token)
+    r = requests.post(url, data=b, headers=h)
+    return check_200_status(r.status_code)
