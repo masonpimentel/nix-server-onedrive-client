@@ -4,14 +4,16 @@ epoch=$(date +%s)
 tdate=$(date "+%F-%T")
 ftdate=${tdate//":"/"-"}
 
+invoker=$(src/invoker)
+
 repo_path=$(cat dev_config.json | jq -r '.paths.repo_path')
 tmp_path=$repo_path/.tmp
 
-mkdir $tmp_path 
+mkdir $tmp_path
 
 function logger {
     cd $repo_path/src
-    python3 -u logger.py "$1" "$2" >> ../output.txt
+    $invoker -u logger.py "$1" "$2" >> ../output.txt
     cd ..
 }
 
@@ -49,7 +51,7 @@ done
 
 logger "Running upload" "verbose"
 cd $repo_path/src
-python3 -u upload.py >> ../output.txt
+$invoker -u upload.py >> ../output.txt
 
 logger "Cleaning up" "verbose"
 rm -rf $tmp_path
