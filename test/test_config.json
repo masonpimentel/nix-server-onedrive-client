@@ -1,3 +1,4 @@
 {
-    "onedrive_dir_prefix": "server_"
+    "onedrive_dir_prefix": "server_",
+    "onedrive_root_dir": "TestServerBackup"
 }

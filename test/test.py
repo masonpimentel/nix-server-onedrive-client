@@ -43,6 +43,19 @@ def main():
 
     print(mapping)
 
+    user_config = config_get_user()
+    root_path = config_get_dev_paths()["repo_path"]
+
+    test_user_pairs = []
+
+    for local_dir in mapping.keys():
+        test_user_pairs.append({
+            "local_dir": os.path.join(root_path, "test", local_dir),
+            "server_dir": test_config["onedrive_root_dir"] + "/" + mapping[local_dir]
+        })
+
+    print(test_user_pairs)
+
 
 if __name__ == '__main__':
     main()
