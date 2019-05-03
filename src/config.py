@@ -68,5 +68,6 @@ def main():
     else:
         setup_refresh_token()
 
+
 if __name__ == '__main__':
     main()

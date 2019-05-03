@@ -11,6 +11,11 @@ def config_get_user():
         return json.load(config_file)
 
 
+def config_get_test():
+    with open("../test/test_config.json") as config_file:
+        return json.load(config_file)
+
+
 def config_get_dev_urls():
     return config_get_dev()["urls"]
 
