@@ -15,6 +15,8 @@ function logger {
     cd ..
 }
 
+cd $repo_path
+
 # iterate through each path
 tar_paths=()
 while read pair; do
