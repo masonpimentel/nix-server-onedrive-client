@@ -1,4 +1,4 @@
-from api import *
+from lib.api import *
 
 from fsplit.filesplit import FileSplit
 import tempfile

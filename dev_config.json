@@ -8,6 +8,7 @@
         "repo_path": "",
         "upload_pairs": []
     },
+    "python_invoker": "",
     "req_bodies": {
         "api_get_refresh_token_sub": "client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={auth_code}&grant_type=authorization_code",
         "refresh_body": "",
@@ -20,6 +21,7 @@
         "directory_sub": "/me/drive/root:/{directory}",
         "file_id_sub": "/me/drive/items/{file_id}",
         "get_auth_code_sub": "https://login.live.com/oauth20_authorize.srf?client_id={client_id}&scope=files.readwrite+offline_access&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Funix-server-onedrive-client%2Fcallback",
+        "path_children_sub": "/me/drive/root:/{path}:/children",
         "redirect_uri": "http://localhost:8000/unix-server-onedrive-client/callback",
         "url_root": "https://graph.microsoft.com/v1.0"
     }

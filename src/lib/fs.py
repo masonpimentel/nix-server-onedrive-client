@@ -1,6 +1,6 @@
 import os
-from debugging import *
-from utils import *
+from lib.debugging import *
+from lib.utils import *
 
 
 def fs_get_local_filename(dev_upload_pair_index):

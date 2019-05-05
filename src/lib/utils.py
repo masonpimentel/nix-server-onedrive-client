@@ -1,5 +1,4 @@
 import json
-from debugging import *
 
 
 def config_get_dev():
@@ -9,6 +8,11 @@ def config_get_dev():
 
 def config_get_user():
     with open("../user_config.json") as config_file:
+        return json.load(config_file)
+
+
+def config_get_test():
+    with open("../test/test_config.json") as config_file:
         return json.load(config_file)
 
 
@@ -49,8 +53,26 @@ def config_write_dev(new_config):
         json.dump(new_config, config_file, indent=4, sort_keys=True)
 
 
+def config_write_user(new_config):
+    with open("../user_config.json", "w") as config_file:
+        json.dump(new_config, config_file, indent=4, sort_keys=True)
+
+
 def config_clear_dev_auth_code():
     dev_config = config_get_dev()
     dev_config["auth"]["auth_code"] = ""
     config_write_dev(dev_config)
 
+
+def config_clear_refresh_token():
+    dev_config = config_get_dev()
+    dev_config["auth"]["refresh_token"] = ""
+    dev_config["req_bodies"]["refresh_body"] = ""
+    config_write_dev(dev_config)
+
+
+def config_clear_user_auth():
+    user_config = config_get_user()
+    user_config["auth"]["client_id"] = ""
+    user_config["auth"]["client_secret"] = ""
+    config_write_user(user_config)
