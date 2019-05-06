@@ -55,6 +55,25 @@ def setup_refresh_token():
         print_message("Your refresh token has already been configured!", "CONFIG", "info")
 
 
+def configure_cronjob():
+    repo_path_cmd = "repo_path=" + config_get_dev_paths()["repo_path"]
+    f = open("../cronjob", "r")
+    lines = f.readlines()
+    f.close()
+
+    for i, line in enumerate(lines):
+        if line.rstrip("\n") == "{repo_path_cmd}":
+            lines[i] = repo_path_cmd + "\n"
+            f = open("../cronjob", "w")
+            contents = "".join(lines)
+            f.write(contents)
+            f.close()
+            print_message("Cronjob configured", "CONFIG", "info")
+            return
+
+    raise RuntimeError("Error configuring cronjob")
+
+
 def main():
     parser = argparse.ArgumentParser()
     setup_parser(parser)
