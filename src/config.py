@@ -85,6 +85,7 @@ def main():
     elif parser.parse_args().clear:
         clear_configuration()
     else:
+        configure_cronjob()
         setup_refresh_token()
 
 
