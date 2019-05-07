@@ -292,3 +292,11 @@ If you're not sure what's happening at this point, you're in the [vim](https://c
 _Editing the crontab_ |
 
 This will run the script at 12AM and 12PM daily, as denoted by the `0` in the minutes column, the `*/12` for hours divisible by 12, and asterisks for the remaining columns. See [cronjob](cronjob).
+
+#### Hint for development
+
+To debug the output of the cronjob, you can use the following, which will pipe stdout and stderr to a text file:
+
+```
+<minute> <hour> * * * <path>/unix-server-onedrive-client/cronjob >> <path>/unix-server-onedrive-client/cronLog.txt 2>&1
+```
