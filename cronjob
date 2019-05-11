@@ -35,7 +35,7 @@ while read pair; do
 
     tar_paths+=($tmp_path/$ts_filename)
 
-    logger "Created $ts_filename" "verbose"
+    logger "Creating $ts_filename" "verbose"
 
     tar -zcf $tmp_path/$ts_filename $filepath &>/dev/null
 done < <(cat user_config.json | jq -c '.paths.upload_pairs[]')

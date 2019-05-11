@@ -30,7 +30,8 @@ def get_chunks(tmpdirname, pair_index):
     for file in files:
         if file.startswith(filename):
             chunks.append(file)
-    return chunks
+
+    return sorted(chunks)
 
 
 def main():
