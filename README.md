@@ -99,7 +99,7 @@ https://docs.python-guide.org/starting/install3/linux/
 If you decided to go with Ubuntu 18.04 server, Python 3 is already installed but pip can be installed using the following:
 
 ```
-$ sudo apt-get install python3-pip
+$ sudo apt install python3-pip
 ``` 
 
 Check your Python version using the `-V` argument:
