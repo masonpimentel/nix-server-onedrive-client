@@ -44,6 +44,10 @@ def config_get_user_limits():
     return config_get_user()["limits"]
 
 
+def config_get_dev_limits():
+    return config_get_dev()["limits"]
+
+
 def config_get_user_verbosity():
     return config_get_user()["verbosity"]
 

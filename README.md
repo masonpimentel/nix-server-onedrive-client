@@ -156,7 +156,6 @@ For running the app, the only configuration file that needs to be modified is th
 * `client_id` - you should have this from the `Create Microsoft Application` section
 * `client_secret` - you should also have this from the `Create Microsoft Application` section
 * `backup_max_size` - this is the maxiumum size for all OneDrive upload directories. This means if a directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 5 GB - change this to the desired size (in bytes).
-* `upload_partition_limit` - this should be left alone
 * `upload_pairs` - these are the mappings for the directory on your server that will be uploaded in `.tar.gz` format to the directory in your OneDrive storage. It is an array so you can add as many mappings as you wish. The array expects objects with a `local_dir` string property which should be an absolute path specifying the directory on the server that will be backed up, and `server_dir` string property which should be an absolute path specifying the directory in your OneDrive storage in which the tar will be placed.
 ```
     [

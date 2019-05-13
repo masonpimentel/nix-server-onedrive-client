@@ -3,6 +3,10 @@
         "auth_code": "",
         "refresh_token": ""
     },
+    "limits": {
+        "@upload_partition_limit_note": "60 * 1024 * 1024 = 60 MB = 62914560",
+        "upload_partition_limit": 62914560
+    },
     "paths": {
         "download_pairs": [],
         "repo_path": "",

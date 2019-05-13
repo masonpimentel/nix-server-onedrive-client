@@ -35,9 +35,7 @@ def get_chunks(tmpdirname, pair_index):
 
 
 def main():
-    # TODO: check server backup size is correct before continuing
-
-    user_limits = config_get_user_limits()
+    dev_limits = config_get_dev_limits()
     token = api_get_token()
 
     pair_index = 0
@@ -46,8 +44,8 @@ def main():
         upload_url = api_create_upload_session(token, pair_index)
         total_size = fs_get_upload_size(pair_index)
 
-        if total_size > user_limits["upload_partition_limit"]:
-            limit = user_limits["upload_partition_limit"]
+        if total_size > dev_limits["upload_partition_limit"]:
+            limit = dev_limits["upload_partition_limit"]
             print_message("Greater than " + str(limit / 1024 / 1024) + " MB - need to split into chunks", "UPLOAD", "verbose")
 
             with tempfile.TemporaryDirectory(dir=fs_get_parent_dir()) as tmpdirname:
