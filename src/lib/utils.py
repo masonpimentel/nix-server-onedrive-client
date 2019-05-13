@@ -76,3 +76,24 @@ def config_clear_user_auth():
     user_config["auth"]["client_id"] = ""
     user_config["auth"]["client_secret"] = ""
     config_write_user(user_config)
+
+
+def config_replace_cronjob_line(find_string, replace_string_with, contains=False):
+    f = open("../cronjob", "r")
+    lines = f.readlines()
+    f.close()
+
+    for i, line in enumerate(lines):
+        if (contains and find_string in line) or (line.rstrip("\n") == find_string):
+            lines[i] = replace_string_with + "\n"
+            f = open("../cronjob", "w")
+            contents = "".join(lines)
+            f.write(contents)
+            f.close()
+            return True
+
+    return False
+
+
+def config_clear_cronjob_repo_path():
+    config_replace_cronjob_line("repo_path=", "{repo_path_cmd}", True)

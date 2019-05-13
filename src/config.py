@@ -20,6 +20,7 @@ def clear_configuration():
     config_clear_user_auth()
     config_clear_dev_auth_code()
     config_clear_refresh_token()
+    config_clear_cronjob_repo_path()
     print_message("Configuration has been cleared! Re-enter your client ID, client secret in user_config.json to re-configure", "CONFIG", "info")
 
 
@@ -56,22 +57,8 @@ def setup_refresh_token():
 
 
 def configure_cronjob():
-    repo_path_cmd = "repo_path=" + config_get_dev_paths()["repo_path"]
-    f = open("../cronjob", "r")
-    lines = f.readlines()
-    f.close()
-
-    for i, line in enumerate(lines):
-        if line.rstrip("\n") == "{repo_path_cmd}":
-            lines[i] = repo_path_cmd + "\n"
-            f = open("../cronjob", "w")
-            contents = "".join(lines)
-            f.write(contents)
-            f.close()
-            print_message("Cronjob configured", "CONFIG", "info")
-            return
-
-    raise RuntimeError("Error configuring cronjob")
+    if config_replace_cronjob_line("{repo_path_cmd}", "repo_path=" + config_get_dev_paths()["repo_path"]):
+        print_message("Cronjob configured", "CONFIG", "info")
 
 
 def main():
