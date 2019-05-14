@@ -155,23 +155,24 @@ For running the app, the only configuration file that needs to be modified is th
 
 * `client_id` - you should have this from the `Create Microsoft Application` section
 * `client_secret` - you should also have this from the `Create Microsoft Application` section
-* `backup_max_size` - this is the maxiumum size for all OneDrive upload directories. This means if a directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 5 GB - change this to the desired size (in bytes).
-* `upload_pairs` - these are the mappings for the directory on your server that will be uploaded in `.tar.gz` format to the directory in your OneDrive storage. It is an array so you can add as many mappings as you wish. The array expects objects with a `local_dir` string property which should be an absolute path specifying the directory on the server that will be backed up, and `server_dir` string property which should be an absolute path specifying the directory in your OneDrive storage in which the tar will be placed.
+* `upload_pairs` - these are the mappings for the directory on your server that will be uploaded in `.tar.gz` format to the directory in your OneDrive storage. It is an array so you can add as many mappings as you wish. The array expects objects with a `local_dir` string property which should be an absolute path specifying the directory on the server that will be backed up, and `server_dir` string property which should be an absolute path specifying the directory in your OneDrive storage in which the tar will be placed. You can add an optional `server_max_size` property which is an integer that specifies the maximum size for the OneDrive directory in bytes. If the OneDrive directory in the mapping reaches this limit, the oldest files will be deleted to maintain the size. Note that if multiple pairs map to the same OneDrive directory, the smallest `server_max_size` will be used, but sequentially (meaning that size will be honored at the time that mapping's `local_dir` is uploaded to the `server_dir`) 
 ```
     [
         {
-            "local_dir": "/absolute/path/to/directory/on/server"
+            "local_dir": "/absolute/path/to/directory/on/server",
             "server_dir" "absolute/path/to/directory/in/OneDrive/storage"
         },
         {
-            "local_dir": "/another/absolute/path/to/directory/on/server"
-            "server_dir" "another/absolute/path/to/directory/in/OneDrive/storage"
+            "local_dir": "/another/absolute/path/to/directory/on/server",
+            "server_dir": "another/absolute/path/to/directory/in/OneDrive/storage",
+            "server_max_size": 5368709120
         },
         ...
     ]
 ```
-This can be a many-to-many mapping, meaning you can backup the same directory to multiple OneDrive directories, and vice-versa - you can backup multiple directories to the same OneDrive directory. 
-* `verbosity` - turn on `verbose` to see more log output. It is set to `true` by default. `debug` is more for development purposes.
+This can be a many-to-many mapping, meaning you can backup the same directory to multiple OneDrive directories, and vice-versa - you can backup multiple directories to the same OneDrive directory
+* `backup_max_size` - this is the fallback maxiumum size for all OneDrive upload directories. See `upload_pairs` above. If a directory doesnt have a specified `server_max_size` then this is the value that will be used instead. Just like the `server_max_size` - if a OneDrive directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 10 GB - change this to the desired size (in bytes)
+* `verbosity` - turn on `verbose` to see more log output. It is set to `true` by default. `debug` is more for development purposes
 
 #### Configure token
 

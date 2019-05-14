@@ -8,10 +8,15 @@ def maintain_size(token, file_id, pair_index):
     user_limits = config_get_user_limits()
     backup_size = api_get_server_backup_size(token, pair_index)
 
-    while backup_size > user_limits["backup_max_size"]:
+    if "server_max_size" in config_get_user_paths()["upload_pairs"][pair_index].keys():
+        backup_max = config_get_user_paths()["upload_pairs"][pair_index]["server_max_size"]
+    else:
+        backup_max = user_limits["backup_max_size"]
+
+    while backup_size > backup_max:
         print_message("Current backup size: " + "{:.0f}".format(backup_size / 1024 / 1024) + " MB", "UPLOAD", "verbose")
         delete_oldest(token, file_id)
-        backup_size = api_get_server_backup_size(token)
+        backup_size = api_get_server_backup_size(token, pair_index)
 
 
 def delete_oldest(token, file_id):
