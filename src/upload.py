@@ -15,15 +15,15 @@ def maintain_size(token, file_id, pair_index):
 
     while backup_size > backup_max:
         print_message("Current backup size: " + "{:.0f}".format(backup_size / 1024 / 1024) + " MB", "UPLOAD", "verbose")
-        delete_oldest(token, file_id)
+        delete_oldest(token, file_id, pair_index)
         backup_size = api_get_server_backup_size(token, pair_index)
 
 
-def delete_oldest(token, file_id):
+def delete_oldest(token, file_id, pair_index):
     files = api_get_all_backups(token, file_id)
     files.sort()
     oldest = files[0]
-    file_id = api_get_file_id(token, oldest)
+    file_id = api_get_file_id(token, oldest, pair_index)
     print_message("Deleting " + file_id, "UPLOAD", "verbose")
     api_delete_file(token, file_id)
 
