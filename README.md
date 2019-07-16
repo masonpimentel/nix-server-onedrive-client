@@ -118,6 +118,20 @@ $ pip3 -V
 pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
 ```
 
+##### Dependencies
+
+Run the following to install the necessary Python packages:
+
+```
+$ pip3 install filesplit requests
+```
+
+Run the following (on Ubuntu at least) to install `jq`:
+
+```
+$ sudo apt install jq
+```
+
 ##### Setting up Python invoker
 
 Now that we know what our Python invoker is (in the case above, it is `python3`) we need to configure the app to use this. To do so, run:
@@ -131,20 +145,6 @@ For the example above, it would be:
 ```
 $ cd <path>/unix-server-onedrive-client
 $ ./config python3
-```
-
-##### Dependencies
-
-Run the following to install the necessary Python packages:
-
-```
-$ pip3 install filesplit requests
-```
-
-Run the following (on Ubuntu at least) to install `jq`:
-
-```
-$ sudo apt install jq
 ```
 
 #### Complete configuration JSON
