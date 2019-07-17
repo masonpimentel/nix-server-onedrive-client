@@ -219,6 +219,10 @@ This is the value you will need to enter in the console prompt.
 ------------ | 
 _App and token successfully configured_ |
 
+NOTE: recently (July 16, 2019) it's been observed that certain `client_id` and `client_secret` pairs just don't work - see https://github.com/masonpimentel/unix-server-onedrive-client/issues/16
+
+The current workaround is to just try again with a new application (use the steps in the `Clear configuration` section just below, and repeat the steps from the `Create Microsoft Application` section)
+
 ##### Clear configuration
 
 If for any reason you need to clear your configuration, you can run the following:
