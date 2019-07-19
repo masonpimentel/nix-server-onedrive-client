@@ -18,7 +18,7 @@ _Illustrating the possible many-to-many mapping of server to OneDrive directorie
 You might be wondering if this is relevant with several Linux OneDrive clients available including [ExpanDrive](https://www.expandrive.com/onedrive-for-linux/) and [skilion's OneDrive client](https://github.com/skilion/onedrive).
 
 1. The purpose of this is to create snapshots - not a dynamic, real-time backup that normal two-way sync clients provide
-2. With this you are able to control the frequency and timing of your backups, as well as the the total size of all backups in your cloud storage
+2. With this you are able to control the frequency and timing of your backups, as well as the total size of all backups in your cloud storage
 3. Some clients require a GUI - which a server sometimes does not have
 4. Setup instructions include registering your own Microsoft application - which means you have full control over your own data
 
@@ -85,7 +85,7 @@ _Saving the application ID_ |
 
 ### Set up Python Application
 
-This section describes how to set up your environment to run the Python application, including pulling the code, installing necessary tools and depencencies, getting your API token and configuring the app.
+This section describes how to set up your environment to run the Python application, including pulling the code, installing necessary tools and dependencies, getting your API token and configuring the app.
 
 #### Clone repository
 
@@ -186,7 +186,7 @@ For running the app, the only configuration file that needs to be modified is th
     ]
 ```
 This can be a many-to-many mapping, meaning you can backup the same directory to multiple OneDrive directories, and vice-versa - you can backup multiple directories to the same OneDrive directory
-* `backup_max_size` - this is the fallback maxiumum size for all OneDrive upload directories. See `upload_pairs` above. If a directory doesnt have a specified `server_max_size` then this is the value that will be used instead. Just like the `server_max_size` - if a OneDrive directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 10 GB - change this to the desired size (in bytes)
+* `backup_max_size` - this is the fallback maximum size for all OneDrive upload directories. See `upload_pairs` above. If a directory doesn't have a specified `server_max_size` then this is the value that will be used instead. Just like the `server_max_size` - if a OneDrive directory reaches this limit, the oldest files will be deleted to maintain the size. It is set by default to 10 GB - change this to the desired size (in bytes)
 * `verbosity` - turn on `verbose` to see more log output. It is set to `true` by default. `debug` is more for development purposes
 
 #### Configure token
