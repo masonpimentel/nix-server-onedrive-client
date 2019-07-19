@@ -13,6 +13,21 @@ It takes a list of mappings of directories on the server that are uploaded to th
 ------------ | 
 _Illustrating the possible many-to-many mapping of server to OneDrive directories_ |
 
+### Why?
+
+You might be wondering if this is relevant with several Linux OneDrive clients available including [ExpanDrive](https://www.expandrive.com/onedrive-for-linux/) and [skilion's OneDrive client](https://github.com/skilion/onedrive).
+
+1. The purpose of this is to create snapshots - not a dynamic, real-time backup that normal two-way sync clients provide
+2. With this you are able to control the frequency and timing of your backups, as well as the the total size of all backups in your cloud storage
+3. Some clients require a GUI - which a server sometimes does not have
+4. Setup instructions include registering your own Microsoft application - which means you have full control over your own data
+
+A possible plus or minus:
+
+* Application is written in Python, environment scripts are written in Bash, scheduling is done via [cron](https://en.wikipedia.org/wiki/Cron)
+
+### This Guide
+
 This README is more of a guide and includes instructions on everything from setting up your Microsoft project, to setting up the Python application and setting up the cron jobs on your server.
 
 It consists of the following parts:
