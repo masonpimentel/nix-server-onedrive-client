@@ -45,43 +45,47 @@ What you will need:
 
 ### Create Microsoft Application
 
-In order to use Microsoft's services API which is referred to as Microsoft Graph, you will need to use your account to register an application. To do so, visit their application registration portal:
+Old instructions using Microsoft's app registration portal can be found [here](old_msapp_instructions.md) 
 
-https://apps.dev.microsoft.com/
+In order to use Microsoft's services API which is referred to as Microsoft Graph, you will need to use your account to register an application. To do so, go to Azure portal:
 
-Once you've signed in, click on "Add an app". Give your app a name and click on "Create application".
+https://portal.azure.com
 
-![](documentation/screenshots/screen1.png) |
+Once you've signed in, use the search bar to find app registrations:
+
+![](documentation/screenshots/screen14.png) |
 ------------ | 
-_Creating the Microsoft application_ |
+_Navigating to app registration portal_ |
 
+Click on "New registration".
 
-First thing you want to do is generate a new application secret in password form. So click on "Generate New Password". Be sure to save the client secret! You'll eventually enter this in your configuration file as the `client_secret`.
+Name the app something like `unix-server-onedrive-client`. Leave the default option for supported account types. Use the following as the redirect URI: `http://localhost:8000/unix-server-onedrive-client/callback`
 
-![](documentation/screenshots/screen2.png) |
+![](documentation/screenshots/screen15.png) |
 ------------ | 
-_Getting a client secret_ |
+_Creating a new application_ |
 
-Next you're going to want to add your platform. We're going to authenticate in the browser so click on "Add Platform", then "Web".
+Click on "Register".
 
+The first thing you'll need is the client ID for the app. You can find this in the "Overview" section. Click on the copy to clipboard icon to save it. When configuring the Python application this will be used as the `client_id`.
 
-![](documentation/screenshots/screen3.png) |
+![](documentation/screenshots/screen18.png) |
 ------------ | 
-_Adding the web platform_ |
+_Saving the client ID_ |
 
-Add the following as the redirect URL: `http://localhost:8000/unix-server-onedrive-client/callback`.
+Next you want to generate a new client secret. Go to "Certificates & secrets" and in the "Client secrets" section click on "New client secret": 
 
-![](documentation/screenshots/screen4.png) |
+![](documentation/screenshots/screen16.png) |
 ------------ | 
-_Adding the redirect URL_ |
+_Generating a client secret_ |
 
-The default permissions work for the purposes of the app. Click on "Save" at the bottom to save your changes.
+You can leave the description field empty. Choose any expiry length, then click "Add". 
 
-Before leaving, save your application ID. You'll enter this in the configuration file as the `client_id`.
+Once the secret is generated, click on the copy to clipboard icon and be sure to save it as you won't be able to copy it again! When you're configuring the Python app later, this will be used as the `client_secret`.
 
-![](documentation/screenshots/screen5.png) |
+![](documentation/screenshots/screen17.png) |
 ------------ | 
-_Saving the application ID_ |
+_Saving the client secret_ |
 
 ### Set up Python Application
 
