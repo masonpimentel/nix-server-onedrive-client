@@ -96,13 +96,13 @@ This section describes how to set up your environment to run the Python applicat
 Make sure you're in the directory where you want to run the Python application and Cronjob from. The rest of these steps will denote the current directory by `<path>`
 
 ```
-$ git clone https://github.com/snxfz947/unix-server-onedrive-client.git
+$ git clone https://github.com/masonpimentel/unix-server-onedrive-client.git
 ```
 
 Alternatively, if you want to use SSH:
 
 ```
-$ git clone git@github.com:snxfz947/unix-server-onedrive-client.git
+$ git clone git@github.com:masonpimentel/unix-server-onedrive-client.git
 ```
 
 #### Install relevant tools
