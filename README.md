@@ -9,7 +9,7 @@ _Concept_ |
 
 It takes a list of mappings of directories on the server that are uploaded to the specified directory/directories in OneDrive. The server directory is compressed into `.tar.gz` format before being uploaded. 
 
-![](documentation/assets/many-to-many-mapping.png) |
+![](documentation/assets/many-to-many-mapping-built.png) |
 ------------ | 
 _Illustrating the possible many-to-many mapping of server to OneDrive directories_ |
 
