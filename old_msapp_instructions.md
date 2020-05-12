@@ -26,7 +26,7 @@ Next you're going to want to add your platform. We're going to authenticate in t
 ------------ | 
 _Adding the web platform_ |
 
-Add the following as the redirect URL: `http://localhost:8000/unix-server-onedrive-client/callback`.
+Add the following as the redirect URL: `http://localhost:8000/nix-server-onedrive-client/callback`.
 
 ![](documentation/screenshots/screen4.png) |
 ------------ | 

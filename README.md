@@ -1,9 +1,9 @@
-## Unix Server OneDrive Client
+## *nix Server OneDrive Client
 
 
-This application will allow you to automate backing up directories from a Unix-based server to your OneDrive cloud storage. The primary application of this is creating an off-premise cloud backup using your OneDrive service for critical directories such as a Git remote.
+This application will allow you to automate backing up directories from a [*nix-based](https://en.wikipedia.org/wiki/Unix-like) server to your OneDrive cloud storage. The primary application of this is creating an off-premise cloud backup using your OneDrive service for critical directories such as a Git remote.
 
-![](documentation/unix-server-onedrive-client.png) |
+![](documentation/nix-server-onedrive-client.png) |
 ------------ | 
 _Concept_ | 
 
@@ -34,9 +34,9 @@ It consists of the following parts:
 
 - Using the Microsoft application registration portal to set up your OneDrive service API
 - Setting up the Python application that utilizes the API
-- Setting up the cronjobs that can be run on a Unix-based server to execute the Python application at a given interval
+- Setting up the cronjobs that can be run on a *nix-based server to execute the Python application at a given interval
 
-Note that this guide assumes you are using a Unix cron scheduler but theoretically you could run this from any machine as long as it has a scheduler and can run Python. In this case we would normally call this machine the 'server' but actually the way it's applied here it's more of a client from how it will be interacting with Microsoft's service API.
+Note that this guide assumes you are using a cron scheduler but theoretically you could run this from any machine as long as it has a scheduler and can run Python. In this case we would normally call this machine the 'server' but actually the way it's applied here it's more of a client from how it will be interacting with Microsoft's service API.
 
 What you will need:
 - A machine with a scheduler that can run Python - ideally with 24/7 availability
@@ -59,9 +59,9 @@ _Navigating to app registration portal_ |
 
 Click on "New registration".
 
-Name the app something like `unix-server-onedrive-client`. Leave the default option for supported account types. Use the following as the redirect URI: `http://localhost:8000/unix-server-onedrive-client/callback`
+Name the app something like `nix-server-onedrive-client`. Leave the default option for supported account types. Use the following as the redirect URI: `http://localhost:8000/nix-server-onedrive-client/callback`
 
-![](documentation/screenshots/screen15.png) |
+![](documentation/screenshots/screen19.png) |
 ------------ | 
 _Creating a new application_ |
 
@@ -69,7 +69,7 @@ Click on "Register".
 
 The first thing you'll need is the client ID for the app. You can find this in the "Overview" section. Click on the copy to clipboard icon to save it. When configuring the Python application this will be used as the `client_id`.
 
-![](documentation/screenshots/screen18.png) |
+![](documentation/screenshots/screen20.png) |
 ------------ | 
 _Saving the client ID_ |
 
@@ -96,13 +96,13 @@ This section describes how to set up your environment to run the Python applicat
 Make sure you're in the directory where you want to run the Python application and Cronjob from. The rest of these steps will denote the current directory by `<path>`
 
 ```
-$ git clone https://github.com/masonpimentel/unix-server-onedrive-client.git
+$ git clone https://github.com/masonpimentel/nix-server-onedrive-client.git
 ```
 
 Alternatively, if you want to use SSH:
 
 ```
-$ git clone git@github.com:masonpimentel/unix-server-onedrive-client.git
+$ git clone git@github.com:masonpimentel/nix-server-onedrive-client.git
 ```
 
 #### Install relevant tools
@@ -162,7 +162,7 @@ $ ./config <Python invoker>
 For the example above, it would be:
 
 ```
-$ cd <path>/unix-server-onedrive-client
+$ cd <path>/nix-server-onedrive-client
 $ ./config python3
 ```
 
@@ -200,7 +200,7 @@ We will now use our credentials to get our API token for sending requests to our
 Run the `config` script with no arguments:
 
 ```
-$ cd <path>/unix-server-onedrive-client
+$ cd <path>/nix-server-onedrive-client
 $ ./config
 ```
 
@@ -238,7 +238,7 @@ This is the value you will need to enter in the console prompt.
 ------------ | 
 _App and token successfully configured_ |
 
-NOTE: recently (July 16, 2019) it's been observed that certain `client_id` and `client_secret` pairs just don't work - see https://github.com/masonpimentel/unix-server-onedrive-client/issues/16
+NOTE: recently (July 16, 2019) it's been observed that certain `client_id` and `client_secret` pairs just don't work - see https://github.com/masonpimentel/nix-server-onedrive-client/issues/16
 
 The current workaround is to just try again with a new application (use the steps in the `Clear configuration` section just below, and repeat the steps from the `Create Microsoft Application` section)
 
@@ -247,7 +247,7 @@ The current workaround is to just try again with a new application (use the step
 If for any reason you need to clear your configuration, you can run the following:
 
 ```
-$ cd <path>/unix-server-onedrive-client
+$ cd <path>/nix-server-onedrive-client
 $ ./config clear
 ```
 
@@ -262,16 +262,16 @@ This section describes how to manually execute the app (the last section explain
 You can make a manual run by running:
 
 ```
-$ cd <path>/unix-server-onedrive-client
+$ cd <path>/nix-server-onedrive-client
 $ ./cronjob &
 ```
 
 #### Viewing Logs
 
-To see the logs, open `<path>/unix-server-onedrive-client/output.txt` This can be done by running:
+To see the logs, open `<path>/nix-server-onedrive-client/output.txt` This can be done by running:
 
 ```
-$ cat <path>/unix-server-onedrive-client/output.txt
+$ cat <path>/nix-server-onedrive-client/output.txt
 ```
 
 ![](documentation/screenshots/screen13.png) |
@@ -290,7 +290,7 @@ Here you can see:
 To clear the logs, run:
 
 ```
-$ cd <path>/unix-server-onedrive-client
+$ cd <path>/nix-server-onedrive-client
 $ ./clear
 ```
 
@@ -305,7 +305,7 @@ $ crontab -e
 This should open the file in your preferred editor. On a fresh Ubuntu instance it will let you choose which editor you want to use - if you're not sure, enter "2". You want to enter the following at the end of the file, replacing `<path>` according to the actual path where you cloned the repository:
 
 ```
-0 */12 * * * <path>/unix-server-onedrive-client/cronjob
+0 */12 * * * <path>/nix-server-onedrive-client/cronjob
 ```
 
 If you're not sure what's happening at this point, you're in the [vim](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started) editor. Just press "j" until your cursor reaches the bottom, "o" to start editing, then copy+paste the above if your shell terminal allows it, otherwise enter it in manually. Then press ESC to exit editor mode, ":" (colon), "wq" then ENTER to save and exit. 
@@ -321,5 +321,5 @@ This will run the script at 12AM and 12PM daily, as denoted by the `0` in the mi
 To debug the output of the cronjob, you can use the following, which will pipe stdout and stderr to a text file:
 
 ```
-<minute> <hour> * * * <path>/unix-server-onedrive-client/cronjob >> <path>/unix-server-onedrive-client/cronLog.txt 2>&1
+<minute> <hour> * * * <path>/nix-server-onedrive-client/cronjob >> <path>/nix-server-onedrive-client/cronLog.txt 2>&1
 ```
